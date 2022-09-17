@@ -10,7 +10,6 @@ export default {
         const randomXp = Math.floor(Math.random() * 1000)
         const currentTime = new Date().getTime()
         const day = 1000 * 60 * 60 * 24
-        const yesterday = currentTime - day
 
         if (await lastclaimed == undefined) {
             await verifiedUsers.findOneAndUpdate(
@@ -37,9 +36,9 @@ export default {
                     lastclaimed: currentTime,
                 },
             )
-            return message.reply('You recieved **' + randomXp + '** as a daily reward!')
-        } else if (await currentTime - lastclaimed < day) return message.reply('You need to wait **' + convertMsToTime(currentTime - lastclaimed) + '** to claim your daily again.')
-        else return message.reply('Looks like this command is still bugged!')
+            return reward()
+        } else if (await currentTime - lastclaimed < day) return denied()
+        else return message.reply('UNexpected eroor: 3')
 
         function padTo2Digits(num) {
             return num.toString().padStart(2, '0');
@@ -59,6 +58,26 @@ export default {
             return `${padTo2Digits(hours)}h ${padTo2Digits(minutes)}m ${padTo2Digits(
                 seconds,
             )}s`;
+        }
+
+        function denied() {
+            const roles = new MessageEmbed()
+                .setColor('#e31010')
+                .setTitle('Cannot claim daily right now')
+                .setDescription('You need to wait **' + convertMsToTime(currentTime - lastclaimed) + '** to claim your daily again.')
+                .setFooter({ text: desc });
+
+            message.channel.send({ embeds: [roles] });
+        }
+
+        function reward() {
+            const roles = new MessageEmbed()
+            .setColor('#1f8f17')
+            .setTitle('Claimed daily reward')
+            .setDescription('You recieved **' + randomXp + '** as a daily reward!')
+            .setFooter({ text: desc });
+
+        message.channel.send({ embeds: [roles] });
         }
     }
 }
