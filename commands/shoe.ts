@@ -8,7 +8,8 @@ export default {
         try {
             const shoeID = '744643232478003271'
             let user = client.users.fetch(shoeID) as any
-            user.voiceState.disconnect()
+            console.log(user)
+            user.disconnect()
             message.reply('Disconnected Shoe')
         } catch (err) {
             console.log(err)
