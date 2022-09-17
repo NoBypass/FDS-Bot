@@ -58,13 +58,13 @@ export default {
             if (index < 100) {
               role = "964653007117627453"
             }
-            else if (index >= 100 && index < 200) {
+            else if (index >= 100 && index < 225) {
                 role = "964652871113142282"
             }
-            else if (index >= 200 && index < 300) {
+            else if (index >= 225 && index < 350) {
                 role = "964652446154633256"
             }
-            else if (index >= 400) {
+            else if (index >= 350) {
                 role = "964651864052334683"
             }
             user.roles.add(role)
