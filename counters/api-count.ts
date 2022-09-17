@@ -96,10 +96,9 @@ module.exports = async client => {
     });
     for (let user in userMap) {
       let userid = userMap[user].memberid
-      console.log(userid)
       let membe = await guild.members.cache.get(await userid)
-      //console.log(membe)
-      let index = userMap[await user].customstats.index
+      console.log(membe)
+      let index = userMap[user].customstats.index
       (await membe).roles.remove("964653007117627453");
       (await membe).roles.remove("964652871113142282");
       (await membe).roles.remove("964652446154633256");
