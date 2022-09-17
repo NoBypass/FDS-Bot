@@ -86,7 +86,7 @@ module.exports = async client => {
 
     ltpChannel.send({ embeds: [ltp] });
   }
-/*
+
   async function refreshAllRanks() {
     const users = await verifiedUsers.find({});
 
@@ -99,9 +99,9 @@ module.exports = async client => {
       let membe = guild.members.cache.get(userid)
       //console.log(membe)
       let index = userMap[user].customstats.index
-      membe.roles.remove("964653007117627453");
-      membe.roles.remove("964652871113142282");
-      membe.roles.remove("964652446154633256");
+      (await membe).roles.remove("964653007117627453");
+      (await membe).roles.remove("964652871113142282");
+      (await membe).roles.remove("964652446154633256");
       var role = ""
       if (index < 100) {
         //role = guild.roles.cache.find(r => r.id === "964653007117627453")
@@ -119,10 +119,10 @@ module.exports = async client => {
           //role = guild.roles.cache.find(r => r.id === "964651864052334683")
           role = "964651864052334683"
       }
-      membe.roles.add(role)
+      (await membe).roles.add(role)
     }
   }
-  refreshAllRanks()*/
+  refreshAllRanks()
 
   async function refreshDuelsWins() {
     var totalWins = await verifiedUsers.distinct('stats.duelswins').exec()
