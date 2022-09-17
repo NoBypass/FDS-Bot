@@ -86,7 +86,7 @@ module.exports = async client => {
 
     ltpChannel.send({ embeds: [ltp] });
   }
-
+/*
   async function refreshAllRanks() {
     const users = await verifiedUsers.find({});
 
@@ -122,7 +122,7 @@ module.exports = async client => {
       membe.roles.add(role)
     }
   }
-  refreshAllRanks()
+  refreshAllRanks()*/
 
   async function refreshDuelsWins() {
     var totalWins = await verifiedUsers.distinct('stats.duelswins').exec()
