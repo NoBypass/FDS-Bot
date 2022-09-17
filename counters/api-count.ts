@@ -38,18 +38,6 @@ module.exports = async client => {
     }
   }
 
-  /*
-  async function updateGuildXP() {
-    var allMembers = await verifiedUsers.distinct('uuid')
-    for (let i = 0; i < allMembers.length; i++) {
-      let guildObject = await (getGuildApiData as any).guild.members
-      let guildMember = await guildObject.find(x => x.uuid === await allMembers[i].uuid).foo;
-      let recentXP = await guildMember.expHistory[0]
-      console.log(await recentXP);
-    }
-  }
-  updateGuildXP()*/
-
   var now = new Date() as any
   var millisTill10 = new (Date as any)(now.getFullYear(), now.getMonth(), now.getDate(), 0, 33, 0, 0) - now;
   if (millisTill10 < 0) {
@@ -63,7 +51,6 @@ module.exports = async client => {
       refreshDuelsDeaths()
     }, 10000)
     resetLookingToPlay()
-    //updateGuildXP()
     console.log('New cycle completed: ' + now)
   }, millisTill10);
 
@@ -110,5 +97,4 @@ module.exports = async client => {
   setTimeout(() => {
     refreshDuelsDeaths()
   }, 10000)
-  //refreshAllRanks()
 }

@@ -38,7 +38,7 @@ export default {
             )
             return reward()
         } else if (await currentTime - lastclaimed < day) return denied()
-        else return message.reply('UNexpected eroor: 3')
+        else return message.reply('Unexpected eroor: 3')
 
         function padTo2Digits(num) {
             return num.toString().padStart(2, '0');

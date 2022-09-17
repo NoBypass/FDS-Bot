@@ -56,32 +56,10 @@ const addXP = async (memberid, xpToAdd, message) => {
             }
         )
         const currentNick = await verifiedUsers.where('memberid').equals(memberid).select('ign -_id')
-        if (getGmBo(currentNick[0].ign) as unknown as boolean == true) var prefix = '❂ '
+        if (message.member.roles.cache.some(role => role.name === 'Guild Member')) var prefix = '❂ '
         else prefix = ''
         if (!message.member.permissions.has('ADMINISTRATOR')) message.member.setNickname(prefix + currentNick[0].ign + ' [' + level + ']').catch(err => {console.log(err)})
     }
-}
-
-async function getGmBo(ign) {
-    fetch('https://api.ashcon.app/mojang/v2/user/' + ign)
-    .then(response => response.json())
-    .then(async mdata => {
-        const uuid = (mdata as any).uuid.replaceAll('-', '')
-
-        const gURL = 'https://api.hypixel.net/guild?key=' + hypixel_api_key + '&id=' + guildID
-        fetch(gURL)
-            .then(response => response.json())
-            .then(async gData => {
-                const gMemberArr = gData.guild.members
-                for (var i = 0; i < gMemberArr.length; i++) {
-                    if (gMemberArr[i].uuid == uuid) {
-                        return true;
-                    } else {
-                        return false
-                    }
-                }
-            })
-    })
 }
 
 module.exports.addXP = addXP
