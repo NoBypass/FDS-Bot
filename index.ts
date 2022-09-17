@@ -5,7 +5,7 @@ import verifiedUsers from './schemas/verified-users'
 
 const token = process.env.token
 export const hypixel_api_key = process.env.hypixel_api_key
-export const desc = 'Bot by NoBypass; v2.1.0; Last updated: 09.17.22; patch 1'
+export const desc = 'Bot by NoBypass; v2.2.0; Last updated: 09.17.22; patch 5'
 export const guildID = '62e15cc48ea8c9296133317f'
 
 export const client = new DiscordJS.Client({
