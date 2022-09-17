@@ -86,7 +86,7 @@ module.exports = async client => {
 
     ltpChannel.send({ embeds: [ltp] });
   }
-
+  
   async function refreshAllRanks() {
     const users = await verifiedUsers.find({});
 
@@ -95,7 +95,8 @@ module.exports = async client => {
         userMap[user.ign] = user;
     });
     for (let user in userMap) {
-      let userid = userMap[await user].memberid
+      let userid = userMap[user].memberid
+      console.log(userid)
       let membe = await guild.members.cache.get(await userid)
       //console.log(membe)
       let index = userMap[await user].customstats.index
