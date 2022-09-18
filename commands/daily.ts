@@ -94,7 +94,7 @@ export default {
             const index = data.guild.members.findIndex(object => {
                 return object.uuid === uuid;
             });
-            const bonus = data.guild.members[index].expHistory[formatDate(new Date())] / 20
+            const bonus = Math.round(data.guild.members[index].expHistory[formatDate(new Date())] / 50)
 
             await verifiedUsers.findOneAndUpdate(
                 {
