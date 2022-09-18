@@ -50,7 +50,6 @@ export default {
             const data = await getApiData(uuid) as any
             const indexes = await getIndex(data) as any
             const index = indexes.index
-            console.log(data)
             user.roles.remove("964653007117627453");
             user.roles.remove("964652871113142282");
             user.roles.remove("964652446154633256");
@@ -58,13 +57,13 @@ export default {
             if (index < 100) {
               role = "964653007117627453"
             }
-            else if (index >= 100 && index < 225) {
+            else if (index >= 100 && index < 200) {
                 role = "964652871113142282"
             }
-            else if (index >= 225 && index < 350) {
+            else if (index >= 200 && index < 300) {
                 role = "964652446154633256"
             }
-            else if (index >= 350) {
+            else if (index >= 300) {
                 role = "964651864052334683"
             }
             user.roles.add(role)

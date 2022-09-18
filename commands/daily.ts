@@ -2,6 +2,7 @@ import { Message, MessageEmbed } from "discord.js";
 import { get } from "mongoose";
 import { hypixel_api_key, desc, client } from "../index";
 import verifiedUsers from '../schemas/verified-users'
+import fetch from "node-fetch";
 
 export default {
     callback: async (message: Message, ...args: string[]) => {
@@ -60,24 +61,66 @@ export default {
             )}s`;
         }
 
-        function denied() {
+        async function denied() {
             const roles = new MessageEmbed()
                 .setColor('#e31010')
                 .setTitle('Cannot claim daily right now')
-                .setDescription('You need to wait **' + convertMsToTime(currentTime - lastclaimed) + '** to claim your daily again.')
+                .setDescription('You need to wait **' + convertMsToTime(currentTime - lastclaimed) + '**  to claim your daily again.')
                 .setFooter({ text: desc });
 
             message.channel.send({ embeds: [roles] });
         }
 
-        function reward() {
+        async function reward() {
             const roles = new MessageEmbed()
             .setColor('#1f8f17')
             .setTitle('Claimed daily reward')
-            .setDescription('You recieved **' + randomXp + '** as a daily reward!')
+            .setDescription('You recieved **' + randomXp + '** ' + await getGuildExp() + 'as a daily reward!')
             .setFooter({ text: desc });
 
         message.channel.send({ embeds: [roles] });
+        }
+
+        async function getGuildExp() {
+            const member = await verifiedUsers.findOne({ memberid: message.member.id })
+            const uuid = member.uuid
+            const url = 'https://api.hypixel.net/guild?key=' + hypixel_api_key + '&player=' + uuid
+
+            let settings = { method: "Get" };
+            const response = await fetch(url, settings);
+            const data = await response.json();
+        
+            if (data.guild._id != '62e15cc48ea8c9296133317f') return ''
+            const index = data.guild.members.findIndex(object => {
+                return object.uuid === uuid;
+            });
+            const bonus = data.guild.members[index].expHistory[formatDate(new Date())] / 20
+
+            await verifiedUsers.findOneAndUpdate(
+                {
+                    memberid: userId,
+                },
+                {
+                    $inc: {
+                        xp: bonus,
+                    },
+                    lastclaimed: currentTime,
+                },
+            )
+
+            return '**+ ' + bonus + '** *(Guild Member Bonus)* '
+        }
+
+        function padTo2Digits2(num) {
+            return num.toString().padStart(2, '0');
+        }
+          
+        function formatDate(date) {
+            return [
+                date.getFullYear(),
+                padTo2Digits2(date.getMonth() + 1),
+                padTo2Digits2(date.getDate() - 1),
+            ].join('-');
         }
     }
 }
