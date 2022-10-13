@@ -51,11 +51,11 @@ export default {
                         if (gmBo == true) {
                             message.member.roles.add(GMrole)
                             message.reply('Successfully verified as a guild member. You can now access all the guild-related channels.')
+                            if (!message.member.permissions.has('ADMINISTRATOR')) message.member.setNickname('❂ ' + message.member.displayName).catch(err => { console.log(err) })
                         } else {
                             message.reply('You are not a member of "FDS Employees", please join the guild by applying in #〔👑〕join-guild and then use the command again.')
+                            if (!message.member.permissions.has('ADMINISTRATOR')) message.member.setNickname(message.member.displayName).catch(err => { console.log(err) })
                         }
-
-                        if (!message.member.permissions.has('ADMINISTRATOR')) message.member.setNickname('❂ ' + message.member.displayName).catch(err => { console.log(err) })
                     })
             })
     }
