@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "bot": "nodemon ./index.ts"
+    "bot": "nodemon ./index.ts",
+    "start": "ts-node ./index.ts",
+    "npxstart": "npx ts-node ./index.ts"
   },
   "keywords": [],
   "author": "",
