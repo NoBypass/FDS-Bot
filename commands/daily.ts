@@ -9,8 +9,14 @@ export default {
         const userId = message.member.id
         const lastclaimed = (await verifiedUsers.find({ memberid: userId }).select('lastclaimed -_id') as any)[0].lastclaimed
         const randomXp = Math.floor(Math.random() * 1000)
-        const currentTime = new Date().getTime()
+        const currentTime = (new Date).getTime()
+        const dayBeginning = Date.parse(new Date().toString().slice(0, 13))
         const day = 1000 * 60 * 60 * 24
+
+        async function validate() {
+            if (await lastclaimed  > dayBeginning) return false
+            else return true
+        }
 
         if (await lastclaimed == undefined) {
             await verifiedUsers.findOneAndUpdate(
@@ -25,7 +31,7 @@ export default {
                 },
             )
             return message.reply('You recieved **' + randomXp + '** as a daily reward!')
-        } else if (await currentTime - lastclaimed > day) {
+        } else if (await validate()) {
             await verifiedUsers.findOneAndUpdate(
                 {
                     memberid: userId,
@@ -38,7 +44,7 @@ export default {
                 },
             )
             return reward()
-        } else if (await currentTime - lastclaimed < day) return denied()
+        } else if (await validate()) return denied()
         else return message.reply('Unexpected eroor: 3')
 
         function padTo2Digits(num) {
