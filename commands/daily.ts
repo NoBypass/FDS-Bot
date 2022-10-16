@@ -13,8 +13,6 @@ export default {
         const dayBeginning = Date.parse(new Date().toString().slice(0, 13))
         const day = 1000 * 60 * 60 * 24
 
-        console.log(dayBeginning + '   ' + lastclaimed + ' ' + currentTime)
-
         if (await lastclaimed == undefined) {
             await verifiedUsers.findOneAndUpdate(
                 {
@@ -28,7 +26,7 @@ export default {
                 },
             )
             return message.reply('You recieved **' + randomXp + '** as a daily reward!')
-        } else if (await lastclaimed > dayBeginning) {
+        } else if (await lastclaimed < dayBeginning) {
             await verifiedUsers.findOneAndUpdate(
                 {
                     memberid: userId,
@@ -41,7 +39,7 @@ export default {
                 },
             )
             return reward()
-        } else if (await lastclaimed < dayBeginning) return denied()
+        } else if (await lastclaimed > dayBeginning) return denied()
         else return message.reply('Unexpected erooor: 3')
 
         function padTo2Digits(num) {
