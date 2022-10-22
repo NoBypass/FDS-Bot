@@ -26,7 +26,7 @@ export default {
                 },
             )
             return message.reply('You recieved **' + randomXp + '** as a daily reward!')
-        } else if (await lastclaimed < dayBeginning) {
+        } else if (day + dayBeginning - currentTime < 0) {
             await verifiedUsers.findOneAndUpdate(
                 {
                     memberid: userId,
@@ -39,7 +39,7 @@ export default {
                 },
             )
             return reward()
-        } else if (await lastclaimed > dayBeginning) return denied()
+        } else if (day + dayBeginning - currentTime > 0) return denied()
         else return message.reply('Unexpected erooor: 3')
 
         function padTo2Digits(num) {
@@ -66,7 +66,7 @@ export default {
             const roles = new MessageEmbed()
                 .setColor('#e31010')
                 .setTitle('Cannot claim daily right now')
-                .setDescription('You need to wait **' + convertMsToTime(day + dayBeginning - currentTime) + '**  to claim your daily again.')
+                .setDescription('You need to wait **' + convertMsToTime(day - (day + dayBeginning - currentTime)) + '**  to claim your daily again.')
                 .setFooter({ text: desc });
 
             message.channel.send({ embeds: [roles] });
