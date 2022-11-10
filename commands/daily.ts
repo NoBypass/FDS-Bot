@@ -13,7 +13,7 @@ export default {
         const dayBeginning = Date.parse(new Date().toString().slice(0, 13))
         const day = 1000 * 60 * 60 * 24
 
-        const testObject = await lastclaimed + ' ' + dayBeginning
+        const testObject = await lastclaimed + ' ' + (dayBeginning + day) + (await lastclaimed > (dayBeginning + day))
         console.log(testObject) //?
         if (await lastclaimed == undefined) {
             await verifiedUsers.findOneAndUpdate(
