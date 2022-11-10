@@ -14,6 +14,7 @@ export default {
         const day = 1000 * 60 * 60 * 24
 
         const testObject = await lastclaimed + ' ' + dayBeginning
+        console.log(testObject)
         if (await lastclaimed == undefined) {
             await verifiedUsers.findOneAndUpdate(
                 {
