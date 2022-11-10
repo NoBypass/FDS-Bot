@@ -93,6 +93,7 @@ export default {
             const response = await fetch(url, settings);
             const data = await response.json();
         
+            if (data.guild == undefined) return ''
             if (data.guild._id != '62e15cc48ea8c9296133317f') return ''
             const index = data.guild.members.findIndex(object => {
                 return object.uuid === uuid;
