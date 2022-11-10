@@ -14,7 +14,7 @@ export default {
         const day = 1000 * 60 * 60 * 24
 
         const testObject = await lastclaimed + ' ' + dayBeginning
-        console.log(testObject)
+        console.log(testObject) //?
         if (await lastclaimed == undefined) {
             await verifiedUsers.findOneAndUpdate(
                 {
@@ -68,7 +68,7 @@ export default {
             const roles = new MessageEmbed()
                 .setColor('#e31010')
                 .setTitle('Cannot claim daily right now')
-                .setDescription('You need to wait **' + convertMsToTime(currentTime - dayBeginning) + '**  to claim your daily again.')
+                .setDescription('You need to wait **' + convertMsToTime(dayBeginning + day - currentTime) + '**  to claim your daily again.')
                 .setFooter({ text: desc });
 
             message.channel.send({ embeds: [roles] });
