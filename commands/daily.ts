@@ -90,6 +90,7 @@ export default {
             let settings = { method: "Get" };
             const response = await fetch(url, settings);
             const data = await response.json();
+            console.log(data, url);
         
             if (data.guild == undefined) return ''
             if (data.guild._id != '62e15cc48ea8c9296133317f') return ''
