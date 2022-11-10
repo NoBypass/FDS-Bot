@@ -13,8 +13,6 @@ export default {
         const dayBeginning = (new Date).setHours(0,0,0,0)
         const day = 1000 * 60 * 60 * 24
 
-        const testObject = await lastclaimed + ' ' + (dayBeginning + day) + ' ' + (await lastclaimed > (dayBeginning + day)) + ' ' + dayBeginning
-        console.log(testObject)
         if (await lastclaimed == undefined) {
             await verifiedUsers.findOneAndUpdate(
                 {
@@ -27,7 +25,7 @@ export default {
                     lastclaimed: currentTime,
                 },
             )
-            return message.reply('You recieved **' + randomXp + '** as a daily reward! ;; ' + testObject)
+            return message.reply('You recieved **' + randomXp + '** as a daily reward!')
         } else if (await lastclaimed < dayBeginning) {
             await verifiedUsers.findOneAndUpdate(
                 {
