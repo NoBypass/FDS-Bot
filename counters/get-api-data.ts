@@ -5,7 +5,7 @@ const path = require('path');
 import fetch from "node-fetch";
 var rateLimit = require('function-rate-limit');
 
-const getApiData = rateLimit(110, 1000*60, async function (uuid: string) {
+export const getApiData = rateLimit(110, 1000*60, async function (uuid: string) {
     const url = 'https://api.hypixel.net/player?key=' + hypixel_api_key + '&uuid=' + uuid
 
     let settings = { method: "Get" };
