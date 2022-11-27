@@ -15,7 +15,7 @@ export default {
             .then(async mdata => {
                 var uuid = (mdata as any).uuid
 
-                if (uuid === undefined) return message.reply('Player does not exist')
+                if (uuid === undefined) return message.reply('Player either does not exist or the API couldn\'t respond in time. If thats the case please try again in a minute.')
 
                 /*
                 const gData = 'https://api.hypixel.net/guild?key=' + hypixel_api_key + '&id=' + guildID

@@ -43,7 +43,7 @@ export default {
                         
                 return message.channel.send({ embeds: [embed] });
             } catch (e) {
-                message.reply('**Sorry, there was an error fetching the index or api data, this error is likely player specific and should not appear for most players!**' + e)
+                message.reply('**Sorry, there was an error fetching the index or api data, this error likely means that the API couln\'t respond in time and you can try again in a couple oif minutes.**' + e)
             }
             })
     }
