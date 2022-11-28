@@ -12,10 +12,10 @@ export default {
         const ign = (await verifiedUsers.findOne().where({memberid: message.member.id}).select('ign -_id') as any).ign
         if (args.length == 0) args = [ign]
         if (args.length !== 1) return message.reply('You need to provide one player. (-getindex <playername>)')
-        fetch('https://api.ashcon.app/mojang/v2/user/' + args)
+        fetch('https://api.mojang.com/users/profiles/minecraft/' + args)
             .then(response => response.json())
             .then(async mdata => {
-                var uuid = (mdata as any).uuid
+                var uuid = (mdata as any).id
 
                 try {
                     const data = await getApiData(uuid) as any

@@ -10,10 +10,10 @@ export default {
     callback: async (message: Message, ...args: string[]) => {
         if (!message.member.roles.cache.some(role => role.name === 'Guest')) return message.reply('You\'re already verified.')
 
-        fetch('https://api.ashcon.app/mojang/v2/user/' + args)
+        fetch('https://api.mojang.com/users/profiles/minecraft/' + args)
             .then(response => response.json())
             .then(async mdata => {
-                var uuid = (mdata as any).uuid
+                var uuid = (mdata as any).id
 
                 if (uuid === undefined) return message.reply('Player either does not exist or the API couldn\'t respond in time. If thats the case please try again in a minute.')
 
