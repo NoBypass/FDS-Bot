@@ -2,10 +2,11 @@ import DiscordJS, { ColorResolvable, Intents, Message, MessageEmbed, MessageActi
 import mongoose from 'mongoose'
 import 'dotenv/config'
 import verifiedUsers from './schemas/verified-users'
+import descEmbed from './counters/descEmbed'
 
 const token = process.env.token
 export const hypixel_api_key = process.env.hypixel_api_key
-export const desc = 'Bot by NoBypass; v2.4.0; Last updated: 27.11.22; patch 0'
+export const desc = 'Bot by NoBypass; v2.4.0; Last updated: 27.11.22; patch 3'
 export const guildID = '62e15cc48ea8c9296133317f'
 
 export const client = new DiscordJS.Client({
@@ -21,7 +22,7 @@ export const modList = [
     '672835870080106509',
     '439955595878203403',
 ]
-export const guild = client.guilds.cache.get('897642715368534027')
+export const guild = async () => await client.guilds.fetch('897642715368534027')
 
 client.on('ready', async () => {
     await mongoose.connect(
@@ -262,7 +263,7 @@ client.on('messageCreate', async (message) => {
             })
             if (currentQ == questions.length - 1) {
                 const emb = new MessageEmbed()
-                    .setColor('#000000')
+                    .setColor('#2F3136')
                     .setDescription(questions[questions.length - 1])
                     .setFooter({ text: desc })
                 const buttonRow = new MessageActionRow().addComponents(
@@ -278,7 +279,7 @@ client.on('messageCreate', async (message) => {
                 message.reply({ content: '<@&897648604720795719>', embeds: [emb], components: [buttonRow] })
             } else if (currentQ - 1 < questions.length) {
                 var emb = new MessageEmbed()
-                    .setColor('#000000')
+                    .setColor('#2F3136')
                     .setDescription(questions[currentQ])
                     .setFooter({ text: desc })
                 await message.channel.send({ embeds: [emb] })
@@ -289,11 +290,11 @@ client.on('messageCreate', async (message) => {
     if (message.author.bot) return
     if (message.channel.id == '998259961102598205') {
         if (message.content.startsWith('<@&')) {
-            if (message.content.length > 499) return message.reply('Your message was too long. Please write your message with less than 500 characters.')
+            if (message.content.length > 499) return descEmbed('Your message was too long. Please write your message with less than 500 characters.', message)
             const ping = message.content.slice(0, 22)
             const args = message.content.slice(22, 500).split(', ')
-            if (args.length > 2) return (message as any).reply('You used too many commas.')
-            if (args.length < 1) return message.reply('You used no commas or have to specify more arguments.')
+            if (args.length > 2) return descEmbed('You used too many commas.', message) as any
+            if (args.length < 1) return descEmbed('You used no commas or have to specify more arguments.', message)
 
             const modeNum = message.content.slice(3, 21)
             if (modeNum == '998242097092104242') var mode = 'Scrims'
@@ -303,7 +304,7 @@ client.on('messageCreate', async (message) => {
             else mode = 'with their Friend'
 
             const request = new MessageEmbed()
-                .setColor('#000000')
+                .setColor('#2F3136')
                 .setTitle(message.member.displayName + ' wants to queue ' + mode)
                 .addFields(
                     { name: 'Submode', value: '``' + args[0] + '``', inline: false },
