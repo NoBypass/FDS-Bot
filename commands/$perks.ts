@@ -15,6 +15,7 @@ export default {
             )
             .setFooter({ text: desc });
 
-        message.channel.send({ embeds: [roles] });
+        message.channel.send({ embeds: [roles] })
+        message.delete()
     }
 }

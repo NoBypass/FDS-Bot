@@ -22,6 +22,7 @@ export default {
             )
             .setFooter({ text: desc });
 
-        message.channel.send({ embeds: [exampleEmbed]});
+        message.channel.send({ embeds: [exampleEmbed]})
+        message.delete()
     }
 }

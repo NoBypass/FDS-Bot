@@ -47,6 +47,7 @@ const verifiedUsers = new mongoose.Schema({
         type: Number,
         default: 1,
     },
+    customtag: {type: String},
     lastclaimed: reqNum,
 })
 
