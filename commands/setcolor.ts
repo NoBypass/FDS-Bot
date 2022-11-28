@@ -18,7 +18,7 @@ export default {
 
         if (existingRole == undefined) {
             try {
-                var newRole = (await guild as any).roles.create({
+                var newRole = message.guild.roles.create({
                     name: message.member.id,
                     color: '#' + args[0] as ColorResolvable,
                     mentionable: false,

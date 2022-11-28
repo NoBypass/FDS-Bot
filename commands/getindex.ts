@@ -28,7 +28,7 @@ export default {
                 var facepng = 'https://crafatar.com/avatars/' + uuid + '?size=256&default=MHF_Alex&overlay'
 
                 const embed = new MessageEmbed()
-                    .setColor('#000000')
+                    .setColor('#2F3136')
                     .setTitle((await data).player.displayname + '\'s index is: ' + (await index).toLocaleString())
                     .setThumbnail(facepng)
                     .addFields(
