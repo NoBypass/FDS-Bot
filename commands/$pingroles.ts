@@ -7,7 +7,7 @@ export default {
     callback: async (message: Message, ...args: string[]) => {
         if (!message.member.permissions.has('ADMINISTRATOR')) return message.reply('You don\'t have permission to use this command.')
         const exampleEmbed = new MessageEmbed()
-            .setColor('#000000')
+            .setColor('#2F3136')
             .setTitle('Pingroles:')
             .setDescription('Click on the buttons to get notified on specific events. Click again to remove the role.')
             .addFields(

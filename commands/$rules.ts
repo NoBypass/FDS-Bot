@@ -1,13 +1,12 @@
 import { Message, MessageEmbed } from "discord.js";
 import { hypixel_api_key, desc, client } from "../index";
-const path = require('path');
-var ownname = path.basename(__filename);
+import descEmbed from "../counters/descEmbed";
 
 export default {
     callback: async (message: Message, ...args: string[]) => {
-        if (!message.member.permissions.has('ADMINISTRATOR')) return message.reply('You don\'t have permission to use this command.')
+        if (!message.member.permissions.has('ADMINISTRATOR')) return descEmbed('You don\'t have permission to use this command.', message)
         const exampleEmbed = new MessageEmbed()
-            .setColor('#000000')
+            .setColor('#2F3136')
             .setTitle('Rules:')
             .setDescription('Ignoring these rules can lead to you getting muted or even banned.')
             .addFields(

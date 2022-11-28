@@ -8,7 +8,7 @@ export default {
         if (!message.member.permissions.has('ADMINISTRATOR')) return message.reply('You don\'t have permission to use this command.')
         //const attachment = new MessageAttachment('../assets/fds_emp.png')
         const firstEmbed = new MessageEmbed()
-            .setColor('#000000')
+            .setColor('#2F3136')
             .setImage('https://imgur.com/YVkel12.png')
         const secondEmbed = new MessageEmbed()
             .setColor('#000000')

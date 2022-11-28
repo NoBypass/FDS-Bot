@@ -1,13 +1,12 @@
 import { Message, MessageEmbed } from "discord.js";
+import descEmbed from "../counters/descEmbed";
 import { hypixel_api_key, desc, client } from "../index";
-const path = require('path');
-var ownname = path.basename(__filename);
 
 export default {
     callback: async (message: Message, ...args: string[]) => {
-        if (!message.member.permissions.has('ADMINISTRATOR')) return message.reply('You don\'t have permission to use this command.')
+        if (!message.member.permissions.has('ADMINISTRATOR')) return descEmbed('You don\'t have permission to use this command.', message)
         const roles = new MessageEmbed()
-            .setColor('#000000')
+            .setColor('#2F3136')
             .setTitle('Roles:')
             .setDescription('All the Roles and how to obtain them. \rThe formula for the index is: \r```√(BedWars Stars * 12 + FKDR^2.5 * 3.5) + (Duels Wins / 3.5 + Duels WLR^1.5) + (SkyWars Stars^2.3 + KDR^5) + (Bridge Wins + Bridge WLR^1.7) + (WoolGames Stars * 15 + (WoolWars Kills + WoolWars Assits / 2)^3.5 * 3.5) + (Achievements * 2.2 + Nwetworklevel)) / 100\' ^1.85```')
             .addFields(

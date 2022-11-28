@@ -4,7 +4,7 @@ import { hypixel_api_key, desc, client } from "../index";
 export default {
     callback: async (message: Message, ...args: string[]) => {
         const embed = new MessageEmbed()
-        .setColor('#000000')
+        .setColor('#2F3136')
         .setTitle('Commands:')
         .setDescription('All the commands from our custom bot listed.')
         .addFields(
@@ -15,6 +15,8 @@ export default {
             { name: '-daily', value: 'Gives you some exp. (Only works once a day though)', inline: true },
             { name: '-leaderboard', value: 'Shows a leaderboard of the top 10 server members (based on xp)', inline: true },
             { name: '-profile', value: 'See how much xp a specific member has.', inline: true },
+            { name: '-setcolor', value: 'As a booster: changes your role color.', inline: true },
+            { name: '-settag', value: 'As a booster: changes your custom tag.', inline: true },
         )
         .setFooter({ text: desc });
         

@@ -5,6 +5,7 @@ import verifiedUsers from '../schemas/verified-users'
 import { getApiData } from '../counters/get-api-data'
 import { getIndex } from '../counters/index-count'
 import { getBedWarsStar } from '../counters/index-count'
+import descEmbed from '../counters/descEmbed'
 
 export default {
     callback: async (message: Message, ...args: string[]) => {
@@ -15,7 +16,7 @@ export default {
             .then(async mdata => {
                 var uuid = (mdata as any).id
 
-                if (uuid === undefined) return message.reply('Player either does not exist or the API couldn\'t respond in time. If thats the case please try again in a minute.')
+                if (uuid === undefined) return descEmbed('Player either does not exist or the API couldn\'t respond in time. If thats the case please try again in a minute.', message)
 
                 /*
                 const gData = 'https://api.hypixel.net/guild?key=' + hypixel_api_key + '&id=' + guildID
@@ -100,7 +101,7 @@ export default {
                 verify()
 
                 const embed = new MessageEmbed()
-                .setColor('#000000')
+                .setColor('#2F3136')
                 .setTitle('Successfully linked ' + message.member.user.tag + ' with ' + (await data)?.player?.displayname)
                 .setDescription('Your index is **' + await index + '** thus your division is <@&' + role + '>')
                 .setThumbnail(facepng)
