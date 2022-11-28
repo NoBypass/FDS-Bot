@@ -17,8 +17,7 @@ export default {
                 { name: 'Bronze', value: '<@&' + message.guild.roles.cache.find(role => role.name == "Bronze") + '> Verified people and people who have less than 200 index points', inline: true },
                 { name: 'Silver', value: '<@&' + message.guild.roles.cache.find(role => role.name == "Silver") + '> Verified people and people who have between 200 and 300 index points', inline: true },
                 { name: 'Platinum', value: '<@&' + message.guild.roles.cache.find(role => role.name == "Platinum") + '> Verified people and people who have between 300 and 400 index points', inline: true },
-                { name: 'Titanium', value: '<@&' + message.guild.roles.cache.find(role => role.name == "Titanium") + '> Verified people and people who have over 400 index points', inline: true },
-                { name: 'Top 5', value: '<@&' + message.guild.roles.cache.find(role => role.name == "Top 5") + '> The 5 Members with the highest index', inline: true },
+                { name: 'Titanium', value: '<@&' + message.guild.roles.cache.find(role => role.name == "Titanium") + '> Verified people and people who have over 400 index points', inline: true }
             )
             .setFooter({ text: desc });
 
