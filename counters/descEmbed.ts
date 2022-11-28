@@ -1,10 +1,10 @@
 import { Message, MessageEmbed } from "discord.js";
+import { hypixel_api_key, desc, client } from "../index";
 
-async function descEmbed (desc: string, message: Message) {
+async function descEmbed (description: string, message: Message) {
     const roles = new MessageEmbed()
         .setColor('#2F3136')
-        .setTitle('Booster Perks:')
-        .setDescription(desc)
+        .setDescription(description)
         .setFooter({ text: desc });
 
     message.channel.send({ embeds: [roles] });
