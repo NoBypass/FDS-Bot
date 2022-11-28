@@ -19,10 +19,11 @@ export default {
                 },
             )
         }
+        pushTag(args[0])
 
         const obj = await verifiedUsers.where('memberid').equals(message.member.id).select('ign level -_id')
         if (message.member.roles.cache.some(role => role.name === 'Guild Member')) var prefix = '❂ '
         else prefix = ''
-        if (!message.member.permissions.has('ADMINISTRATOR')) message.member.setNickname(prefix + obj[0].ign + ' [' + obj[0].level + '] [' + args[0] + ']' ).catch(err => {console.log(err)})
+        if (!message.member.permissions.has('ADMINISTRATOR')) message.member.setNickname(prefix + obj[0].ign + ' [' + obj[0].level + '] [' + args[0] + ']').catch(err => {console.log(err)})
     }
 }

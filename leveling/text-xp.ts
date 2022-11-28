@@ -55,10 +55,12 @@ const addXP = async (memberid, xpToAdd, message) => {
                 xp,
             }
         )
-        const currentNick = await verifiedUsers.where('memberid').equals(memberid).select('ign -_id')
+        const obj = await verifiedUsers.where('memberid').equals(memberid).select('ign -_id')
+        if (obj[0].customtag == undefined) var tag = ''
+        else tag = '[' + obj[0].customtag+ ']'
         if (message.member.roles.cache.some(role => role.name === 'Guild Member')) var prefix = '❂ '
         else prefix = ''
-        if (!message.member.permissions.has('ADMINISTRATOR')) message.member.setNickname(prefix + currentNick[0].ign + ' [' + level + ']').catch(err => {console.log(err)})
+        if (!message.member.permissions.has('ADMINISTRATOR')) message.member.setNickname(prefix + obj[0].ign + ' [' + obj[0].level + '] ' + tag).catch(err => {console.log(err)})
     }
 }
 
