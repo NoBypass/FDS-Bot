@@ -12,7 +12,7 @@ export default {
                 && !isNaN(Number('0x' + hex))
         }
 
-        if (isHex(args[0] as any == false)) return descEmbed('Please format your command like this: "-setcolor <hex color>"', message)
+        if (isHex(args[0] as any == false)) return descEmbed('Please format your command like this: "-setcolor <hex color (without the "#")>"', message)
 
         const existingRole = message.guild.roles.cache.find(x => x.name === message.member.id)
 

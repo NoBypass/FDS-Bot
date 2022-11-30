@@ -6,7 +6,7 @@ import descEmbed from './counters/descEmbed'
 
 const token = process.env.token
 export const hypixel_api_key = process.env.hypixel_api_key
-export const desc = 'Bot by NoBypass; v2.4.0; Last updated: 27.11.22; patch 3'
+export const desc = 'Bot by NoBypass; v2.4.0; Last updated: 27.11.22; patch 4'
 export const guildID = '62e15cc48ea8c9296133317f'
 
 export const client = new DiscordJS.Client({

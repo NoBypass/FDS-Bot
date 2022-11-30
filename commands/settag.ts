@@ -6,8 +6,8 @@ export default {
     callback: async (message: Message, ...args: string[]) => {
         if (!message.member.roles.cache.some(role => role.name === 'Server Booster')) return descEmbed('You need to boost the server to use this command.', message)
 
-        if (args.length > 1) return descEmbed('Please format your message like this: "-settag <your tag with 5 or less characters>"', message)
-        if (args[0].length >= 5) return descEmbed('Please format your message like this: "-settag <your tag with 5 or less characters>"', message)
+        if (args.length > 1) return descEmbed('Please format your message like this: "-settag <your tag>"', message)
+        if (args[0].length >= 5) return descEmbed('Please format your message like this: "-settag <your tag with lass than 6 characters>"', message)
 
         async function pushTag(tag: string) {
             await verifiedUsers.findOneAndUpdate(
