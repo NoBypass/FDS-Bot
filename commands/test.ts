@@ -1,3 +1,12 @@
-const date = Date.parse(new Date().toString().slice(0, 13))
+import { Message, MessageEmbed } from "discord.js";
+import { hypixel_api_key, desc, client } from "../index";
+const path = require('path');
+var ownname = path.basename(__filename);
+import verifiedUsers from '../schemas/verified-users'
 
-console.log(date)
+export default {
+    callback: async (message: Message, ...args: string[]) => {
+        const tagholders = await verifiedUsers.find({ customtag:{$exists:true} })
+
+    }
+}

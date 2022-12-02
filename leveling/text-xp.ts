@@ -55,7 +55,7 @@ const addXP = async (memberid, xpToAdd, message) => {
                 xp,
             }
         )
-        const obj = await verifiedUsers.where('memberid').equals(memberid).select('ign -_id')
+        const obj = await verifiedUsers.where('memberid').equals(memberid).select('ign level -_id')
         if (obj[0].customtag == undefined) var tag = ''
         else tag = '[' + obj[0].customtag+ ']'
         if (message.member.roles.cache.some(role => role.name === 'Guild Member')) var prefix = '❂ '

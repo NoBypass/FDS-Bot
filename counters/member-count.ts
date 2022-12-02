@@ -16,6 +16,7 @@ module.exports = client => {
 
         const guild = client.guilds.cache.get('897642715368534027')
         updateMembers(guild)
+
     } catch (e) {
         const channel = client.channels.cache.find(channel => channel.id === '973262334539747348') as any
         channel.send('**Error in** ' + ownname + ' : ' + e)
