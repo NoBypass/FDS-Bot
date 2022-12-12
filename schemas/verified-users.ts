@@ -16,6 +16,18 @@ const boolean = {
     default: false
 }
 
+const annual = {
+    year: Number,
+    timeSpentInVcs: Number,
+    messagesSent: Number,
+    commandsExecuted: Number,
+    dailiesClaimed: Number,
+    xpFromDailies: Number,
+    xpFromVcs: Number,
+    xpFromText: Number,
+    indexGained: Number
+}
+
 const verifiedUsers = new mongoose.Schema({
     ign: reqString,
     uuid: reqString,
@@ -30,7 +42,8 @@ const verifiedUsers = new mongoose.Schema({
     },
     customstats: {
         index: reqString,
-        gm: boolean
+        gm: boolean,
+        annual: [annual]
     },
     form: {
         cquestion: {
