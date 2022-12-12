@@ -69,7 +69,7 @@ export default {
             user.roles.add(role)
 
             const roles = new MessageEmbed()
-            .setColor('#000000')
+            .setColor('#2F3136')
             .setTitle('Updated ' + member.ign + '\'s profile!')
             .setDescription('You got the role <@&' + role + '> because your index is **' + index + '**')
             .setFooter({ text: desc });

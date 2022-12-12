@@ -73,7 +73,7 @@ export default {
         const pBar = '[' + progressStr + ']'
 
         const embed = new MessageEmbed()
-            .setColor('#000000')
+            .setColor('#2F3136')
             .setTitle(await ign + '\'s Profile [lvl: ' + await level + ']')
             .setThumbnail((memberDC as any).displayAvatarURL())
             .addFields(
