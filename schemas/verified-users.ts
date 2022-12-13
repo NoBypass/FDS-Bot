@@ -16,8 +16,7 @@ const boolean = {
     default: false
 }
 
-const annual = {
-    year: Number,
+const serverStats = {
     timeSpentInVcs: Number,
     messagesSent: Number,
     commandsExecuted: Number,
@@ -43,7 +42,11 @@ const verifiedUsers = new mongoose.Schema({
     customstats: {
         index: reqString,
         gm: boolean,
-        annual: [annual]
+        total: serverStats,
+        annual: serverStats,
+        day: serverStats,
+        week: serverStats,
+        month: serverStats
     },
     form: {
         cquestion: {

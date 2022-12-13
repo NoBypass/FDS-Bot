@@ -1,4 +1,4 @@
-import { Message, MessageEmbed } from "discord.js";
+import { Message, AttachmentBuilder, MessageEmbed } from "discord.js";
 import fetch from "node-fetch";
 import { hypixel_api_key, desc, client } from "../index";
 const path = require('path');
@@ -8,7 +8,7 @@ import { getApiData } from '../counters/get-api-data'
 
 export default {
     callback: async (message: Message, ...args: string[]) => {
-        var mmb = '$' as any
+        var mmb = '$' as string
         if (args.length > 1) return message.reply('You can\'t view the profiles of multiple users at once.')
         if (args.length == 0) mmb = (await verifiedUsers.findOne().where({ memberid: message.member.id }) as any).ign
         if (args.length == 1) mmb = await getDisplayName(args[0])
@@ -81,6 +81,24 @@ export default {
                 { name: 'Total XP: ' + totalXP || '**error**', value: '**XP needed: ' + neededXP + '**' || '**error**', inline: false },
             )
             .setFooter({ text: desc });
+
+        if (args[1] == '$t') {
+            const nodeHtmlToImage = require('node-html-to-image')
+
+            const img = nodeHtmlToImage({
+                quality: 100,
+                //output: './image.png',
+                type: 'png',
+                html: '<html><body>Hello {{name}}!</body></html>',
+                content: { name: 'you' },
+                puppeteerArgs: {
+                    args: ['--no-sandbox'],
+                  },
+                encoding: 'buffer'
+            })
+            message.channel.send(new AttachmentBuilder(img, { name: 'profile-image.png' }))
+            
+        }
 
         return message.channel.send({ embeds: [embed] });
     }
