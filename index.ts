@@ -6,7 +6,7 @@ import descEmbed from './counters/descEmbed'
 
 const token = process.env.token
 export const hypixel_api_key = process.env.hypixel_api_key
-export const desc = 'Bot by NoBypass; v2.4.0; Last updated: 27.11.22; patch 4'
+export const desc = 'Bot by NoBypass; v2.4.1; Last updated: 25.12.22; patch 0'
 export const guildID = '62e15cc48ea8c9296133317f'
 
 export const client = new DiscordJS.Client({
@@ -31,22 +31,22 @@ client.on('ready', async () => {
             keepAlive: true
         })
 
-    var duelsWins = await (await verifiedUsers.distinct('stats.duelswins').exec()).map((x) => +x).reduce((partialSum, a) => partialSum + a, 0).toLocaleString()
-    var duelsDeaths = await (await verifiedUsers.distinct('stats.duelsdeaths').exec()).map((x) => +x).reduce((partialSum, a) => partialSum + a, 0).toLocaleString()
-    var duelsKills = await (await verifiedUsers.distinct('stats.duelskills').exec()).map((x) => +x).reduce((partialSum, a) => partialSum + a, 0).toLocaleString()
-    var bridgeWins = await (await verifiedUsers.distinct('stats.bridgewins').exec()).map((x) => +x).reduce((partialSum, a) => partialSum + a, 0).toLocaleString()
-    var bedwarsFinals = await (await verifiedUsers.distinct('stats.bedwarsfinals').exec()).map((x) => +x).reduce((partialSum, a) => partialSum + a, 0).toLocaleString()
-    var bedwarsStars = await (await verifiedUsers.distinct('stats.bedwarsstars').exec()).map((x) => +x).reduce((partialSum, a) => partialSum + a, 0).toLocaleString()
-    const stati = [
+    const DUELS_WINS = (await verifiedUsers.distinct('stats.duelswins').exec()).map((x) => +x).reduce((partialSum, a) => partialSum + a, 0).toLocaleString();
+    const DUELS_DEATHS = (await verifiedUsers.distinct('stats.duelsdeaths').exec()).map((x) => +x).reduce((partialSum, a) => partialSum + a, 0).toLocaleString()
+    const DUELS_KILLS = (await verifiedUsers.distinct('stats.duelskills').exec()).map((x) => +x).reduce((partialSum, a) => partialSum + a, 0).toLocaleString()
+    const BRIDGE_WINS = (await verifiedUsers.distinct('stats.bridgewins').exec()).map((x) => +x).reduce((partialSum, a) => partialSum + a, 0).toLocaleString()
+    const BEDWARS_FINALS = (await verifiedUsers.distinct('stats.bedwarsfinals').exec()).map((x) => +x).reduce((partialSum, a) => partialSum + a, 0).toLocaleString()
+    const BEDWARS_STARS = (await verifiedUsers.distinct('stats.bedwarsstars').exec()).map((x) => +x).reduce((partialSum, a) => partialSum + a, 0).toLocaleString()
+    const statuses = [
         'Do -help',
-        'Duels Wins: ' + duelsWins,
-        'Duels Deaths: ' + duelsDeaths,
+        'Duels Wins: ' + DUELS_WINS,
+        'Duels Deaths: ' + DUELS_DEATHS,
         'Do -help',
-        'Duels Kills: ' + duelsKills,
-        'Bridge Wins: ' + bridgeWins,
+        'Duels Kills: ' + DUELS_KILLS,
+        'Bridge Wins: ' + BRIDGE_WINS,
         'Do -help',
-        'BedWars Finals: ' + bedwarsFinals,
-        'BedWars Stars: ' + bedwarsStars
+        'BedWars Finals: ' + BEDWARS_FINALS,
+        'BedWars Stars: ' + BEDWARS_STARS
     ]
     let i = 0
     const updateStatus = () => {
@@ -54,11 +54,11 @@ client.on('ready', async () => {
             status: 'online',
             activities: [
                 {
-                    name: stati[i]
+                    name: statuses[i]
                 }
             ]
         })
-        if (++i >= stati.length) {
+        if (++i >= statuses.length) {
             i = 0
         }
         setTimeout(updateStatus, 1000 * 5)
@@ -69,15 +69,15 @@ client.on('ready', async () => {
     let memberCount = require('./counters/member-count')
     let allApi = require('./counters/api-count')
     let handler = require('./command-handler')
-    let textxp = require('./leveling/text-xp')
-    let voicexp = require('./leveling/voice-xp')
+    let textXp = require('./leveling/text-xp')
+    let voiceXp = require('./leveling/voice-xp')
     if (handler.default) handler = handler.default
 
     handler(client)
     memberCount(client)
     allApi(client)
-    textxp(client)
-    voicexp(client)
+    textXp(client)
+    voiceXp(client)
 })
 
 client.on('guildMemberAdd', member => {
@@ -150,7 +150,7 @@ client.on('interactionCreate', async (interaction) => {
                         .setCustomId('del'),
                 )
                 const startEmbed = new MessageEmbed()
-                    .setColor('#000000')
+                    .setColor('#2F3136')
                     .setDescription('You have created a "Misc" ticket. This should be used to share "private" information or questions to the server owners.')
                     .setFooter({ text: desc })
 

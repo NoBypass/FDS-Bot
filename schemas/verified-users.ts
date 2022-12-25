@@ -43,10 +43,14 @@ const verifiedUsers = new mongoose.Schema({
         index: reqString,
         gm: boolean,
         total: serverStats,
-        annual: serverStats,
+        year: serverStats,
+        lastyear: serverStats,
         day: serverStats,
+        yesterday: serverStats,
         week: serverStats,
-        month: serverStats
+        lastweek: serverStats,
+        month: serverStats,
+        lastmonth: serverStats
     },
     form: {
         cquestion: {

@@ -11,7 +11,7 @@ export default {
             .setColor('#2F3136')
             .setImage('https://imgur.com/YVkel12.png')
         const secondEmbed = new MessageEmbed()
-            .setColor('#000000')
+            .setColor('#2F3136')
             .setTitle('Requirements:')
             .setDescription('For the requirements you can choose one of the two types of guild members: "Grinder" and "Sweat".')
             .addFields(

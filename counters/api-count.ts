@@ -51,8 +51,38 @@ module.exports = async client => {
       refreshDuelsDeaths()
     }, 10000)
     resetLookingToPlay()
+    pushActivityStats()
     console.log('New cycle completed: ' + now)
   }, millisTill10);
+
+  async function pushActivityStats() {
+    for (let i = 0; i < allUuids.length; i++) {
+      const user = await verifiedUsers.findOne({ uuid: allUuids[i] })
+      verifiedUsers.updateOne(
+        { uuid: allUuids[i] },
+        {
+          customstats: {
+            yesterday: user.customstats.day,
+            $inc: { 
+              week: user.customstats.day,
+              month: user.customstats.day,
+              year: user.customstats.day,
+            },
+            day: {
+              timeSpentInVcs: 0,
+              messagesSent: 0,
+              commandsExecuted: 0,
+              dailiesClaimed: 0,
+              xpFromDailies: 0,
+              xpFromVcs: 0,
+              xpFromText: 0,
+              indexGained: 0
+            }
+          } 
+        } // last / yesterday things
+      )
+    }
+  }
 
   async function resetLookingToPlay() {
     let ltpChannel = client.channels.cache.get('998259961102598205')
@@ -60,7 +90,7 @@ module.exports = async client => {
       ltpChannel.bulkDelete(messages)
     })
     const ltp = new MessageEmbed()
-      .setColor('#000000')
+      .setColor('#2F3136')
       .setTitle('You\'re looking to play with someone else?')
       .setDescription('Type ``@<Mode> <submode (like 1v1, 2v2 or 3v3)>, <additional comments>`` to start a queue. Please make sure you write the comments between the arguments. All the modes you can use are listed below.')
       .addFields(

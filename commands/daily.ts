@@ -8,10 +8,16 @@ export default {
     callback: async (message: Message, ...args: string[]) => {
         const userId = message.member.id
         const lastclaimed = (await verifiedUsers.find({ memberid: userId }).select('lastclaimed -_id') as any)[0].lastclaimed
-        const randomXp = Math.floor(Math.random() * 1000)
-        const currentTime = (new Date).getTime()
-        const dayBeginning = (new Date).setHours(0,0,0,0)
+        let randomXp = Math.floor(Math.random() * 1000)
+        const d = new Date()
+        const currentTime = d.getTime()
+        const dayBeginning = d.setHours(0,0,0,0)
         const day = 1000 * 60 * 60 * 24
+        let additionalMessage = ''
+        if (d.getMonth() == 12 && d.getDate() == 24 || d.getDate() == 25 || d.getDate() == 26) {
+            randomXp = 2500
+            additionalMessage = '**You get 2500xp cuz it\'s christmas time :D**'
+        }
 
         if (await lastclaimed == undefined) {
             await verifiedUsers.findOneAndUpdate(
@@ -25,7 +31,7 @@ export default {
                     lastclaimed: currentTime,
                 },
             )
-            return message.reply('You recieved **' + randomXp + '** as a daily reward!')
+            return reward()
         } else if (await lastclaimed < dayBeginning) {
             await verifiedUsers.findOneAndUpdate(
                 {
@@ -76,7 +82,7 @@ export default {
             const roles = new MessageEmbed()
             .setColor('#1f8f17')
             .setTitle('Claimed daily reward')
-            .setDescription('You recieved **' + randomXp + '** ' + await getGuildExp() + 'as a daily reward!')
+            .setDescription('You recieved **' + randomXp + '** ' + await getGuildExp() + 'as a daily reward!' + additionalMessage)
             .setFooter({ text: desc });
 
         message.channel.send({ embeds: [roles] });
