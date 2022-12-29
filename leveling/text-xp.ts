@@ -37,6 +37,19 @@ const addXP = async (memberid, xpToAdd, message) => {
         },
     )
 
+    verifiedUsers.updateOne(
+        { memberid: memberid },
+        {
+            customstats: {
+                day: {
+                    $inc: {
+                        xpFromText: xpToAdd
+                    },
+                }
+            }
+        }
+    )
+
     let { xp, level } = result
     const needed = getNeededXP(level)
 

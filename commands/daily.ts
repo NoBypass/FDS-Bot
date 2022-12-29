@@ -16,34 +16,12 @@ export default {
         let additionalMessage = ''
         if (d.getMonth() == 12 && d.getDate() == 24 || d.getDate() == 25 || d.getDate() == 26) {
             randomXp = 2500
-            additionalMessage = '**You get 2500xp cuz it\'s christmas time :D**'
+            additionalMessage = ' **You get 2500xp cuz it\'s christmas time :D**'
         }
 
         if (await lastclaimed == undefined) {
-            await verifiedUsers.findOneAndUpdate(
-                {
-                    memberid: userId,
-                },
-                {
-                    $inc: {
-                        xp: randomXp,
-                    },
-                    lastclaimed: currentTime,
-                },
-            )
             return reward()
         } else if (await lastclaimed < dayBeginning) {
-            await verifiedUsers.findOneAndUpdate(
-                {
-                    memberid: userId,
-                },
-                {
-                    $inc: {
-                        xp: randomXp,
-                    },
-                    lastclaimed: currentTime,
-                },
-            )
             return reward()
         } else if (await lastclaimed > dayBeginning) return denied()
         else return message.reply('Unexpected erooor: 3')
@@ -79,6 +57,32 @@ export default {
         }
 
         async function reward() {
+            verifiedUsers.updateOne(
+                { memberid: message.member.id },
+                {
+                    customstats: {
+                        day: {
+                            $inc: {
+                                dailiesClaimed: 1,
+                                xpFromDailies: randomXp
+                            },
+                        }
+                    }
+                }
+            )
+
+            await verifiedUsers.findOneAndUpdate(
+                {
+                    memberid: userId,
+                },
+                {
+                    $inc: {
+                        xp: randomXp,
+                    },
+                    lastclaimed: currentTime,
+                },
+            )
+
             const roles = new MessageEmbed()
             .setColor('#1f8f17')
             .setTitle('Claimed daily reward')

@@ -1,6 +1,6 @@
 import { Message, MessageEmbed } from "discord.js";
 import fetch from "node-fetch";
-import { hypixel_api_key, desc, client, guildID } from "../index";
+import { desc, client } from "../index";
 import verifiedUsers from '../schemas/verified-users'
 import { getApiData } from '../counters/get-api-data'
 import { getIndex } from '../counters/index-count'
@@ -16,17 +16,7 @@ export default {
             .then(async mdata => {
                 var uuid = (mdata as any).id
 
-                if (uuid === undefined) return descEmbed('Player either does not exist or the API couldn\'t respond in time. If thats the case please try again in a minute.', message)
-
-                /*
-                const gData = 'https://api.hypixel.net/guild?key=' + hypixel_api_key + '&id=' + guildID
-                const gMemberArr = (await gData as any).guild.members
-                if (await gMemberArr.some(e => e.uuid === uuid.replace('-', ''))) var gmBo = true
-                else gmBo = false
-
-                const GMrole = message.guild.roles.cache.find(r => r.id === "1001868724955009055")
-                if (gmBo == true) message.member.roles.add(GMrole)
-                */
+                if (uuid === undefined) return descEmbed('Player either does not exist or the API couldn\'t respond in time. If that\'s the case please try again in a minute.', message)
 
                 const data = await getApiData(uuid) as any
                 const bwlevel = getBedWarsStar((await data)?.player?.stats?.Bedwars?.Experience)
@@ -34,28 +24,26 @@ export default {
                 const index = (await indexes).index
                 const indexarr = (await indexes).indexarr
 
+                if (data?.socialMedia?.links?.DISCORD !== message.member.user.tag) return descEmbed('This either is not your account or you have not linked your account with Discord on Hypixel.', message)
+
                 var facepng = 'https://crafatar.com/avatars/' + uuid + '?size=256&default=MHF_Alex&overlay'
 
                 if (index < 100) {
-                    var rolestr = 'Bronze'
                     var role = message.guild.roles.cache.find(r => r.id === "964653007117627453")
                     message.member.roles.add(role)
                 }
                 else if (index >= 100 && index < 200) {
-                    var rolestr = 'Silver'
                     var role = message.guild.roles.cache.find(r => r.id === "964652871113142282")
                     message.member.roles.remove("964653007117627453");
                     message.member.roles.add(role)
                 }
                 else if (index >= 200 && index < 300) {
-                    var rolestr = 'Platinum'
                     var role = message.guild.roles.cache.find(r => r.id === "964652446154633256")
                     message.member.roles.remove("964653007117627453");
                     message.member.roles.remove("964652871113142282");
                     message.member.roles.add(role)
                 }
                 else if (index >= 400) {
-                    var rolestr = 'Titanium'
                     var role = message.guild.roles.cache.find(r => r.id === "964651864052334683")
                     message.member.roles.remove("964653007117627453");
                     message.member.roles.remove("964652871113142282");
@@ -91,7 +79,6 @@ export default {
                         },
                         customstats: {
                             index: await index,
-                            //gm: gmBo,
                         },
                         xp: 0,
                         level: 1,

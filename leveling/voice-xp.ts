@@ -49,6 +49,19 @@ const addXP = async (memberid, xpToAdd) => {
         },
         options,
     )
+    verifiedUsers.updateOne(
+        { memberid: memberid },
+        {
+            customstats: {
+                day: {
+                    $inc: {
+                        timeSpentInVcs: 2,
+                        xpFromVcs: xpToAdd
+                    },
+                }
+            }
+        }
+    )
 }
 
 module.exports.addXP = addXP

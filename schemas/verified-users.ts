@@ -17,14 +17,13 @@ const boolean = {
 }
 
 const serverStats = {
-    timeSpentInVcs: Number,
-    messagesSent: Number,
-    commandsExecuted: Number,
+    timeSpentInVcs: Number, //
+    messagesSent: Number, //
+    commandsExecuted: Number, //
     dailiesClaimed: Number,
     xpFromDailies: Number,
-    xpFromVcs: Number,
-    xpFromText: Number,
-    indexGained: Number
+    xpFromVcs: Number, //
+    xpFromText: Number //
 }
 
 const verifiedUsers = new mongoose.Schema({

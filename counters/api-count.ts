@@ -38,8 +38,8 @@ module.exports = async client => {
     }
   }
 
-  var now = new Date() as any
-  var millisTill10 = new (Date as any)(now.getFullYear(), now.getMonth(), now.getDate(), 0, 33, 0, 0) - now;
+  const now = new Date()
+  var millisTill10 = new (Date as any)(now.getFullYear(), now.getMonth(), now.getDate(), 0, 33, 0, 0) - (now as any);
   if (millisTill10 < 0) {
     millisTill10 += 86400000;
   }
@@ -57,6 +57,16 @@ module.exports = async client => {
 
   async function pushActivityStats() {
     for (let i = 0; i < allUuids.length; i++) {
+      const reset = {
+        timeSpentInVcs: 0,
+        messagesSent: 0,
+        commandsExecuted: 0,
+        dailiesClaimed: 0,
+        xpFromDailies: 0,
+        xpFromVcs: 0,
+        xpFromText: 0,
+        indexGained: 0
+      }
       const user = await verifiedUsers.findOne({ uuid: allUuids[i] })
       verifiedUsers.updateOne(
         { uuid: allUuids[i] },
@@ -68,19 +78,46 @@ module.exports = async client => {
               month: user.customstats.day,
               year: user.customstats.day,
             },
-            day: {
-              timeSpentInVcs: 0,
-              messagesSent: 0,
-              commandsExecuted: 0,
-              dailiesClaimed: 0,
-              xpFromDailies: 0,
-              xpFromVcs: 0,
-              xpFromText: 0,
-              indexGained: 0
-            }
+            day: reset
           } 
-        } // last / yesterday things
+        }
       )
+      if (now.getDate() == 1) {
+        verifiedUsers.updateOne({ uuid: allUuids[i] },
+            {
+            customstats: {
+              $inc: {
+                lastmonth: user.customstats.month,
+              },
+              month: reset,
+            }
+          }
+        )
+      }
+      if (now.getMonth() == 1 && now.getDate() == 1) {
+        verifiedUsers.updateOne({ uuid: allUuids[i] },
+            {
+              customstats: {
+                $inc: {
+                  lastyear: user.customstats.year,
+                },
+                year: reset,
+              }
+            }
+        )
+      }
+      if (now.getDay() == 1) {
+        verifiedUsers.updateOne({ uuid: allUuids[i] },
+            {
+              customstats: {
+                $inc: {
+                  lastweek: user.customstats.week,
+                },
+                week: reset,
+              }
+            }
+        )
+      }
     }
   }
 

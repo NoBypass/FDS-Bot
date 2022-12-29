@@ -1,4 +1,4 @@
-import DiscordJS, { ColorResolvable, Intents, Message, MessageEmbed, MessageActionRow, MessageButton, MessageAttachment, } from 'discord.js'
+import DiscordJS, { MessageEmbed, MessageActionRow, MessageButton, } from 'discord.js'
 import mongoose from 'mongoose'
 import 'dotenv/config'
 import verifiedUsers from './schemas/verified-users'
@@ -6,7 +6,7 @@ import descEmbed from './counters/descEmbed'
 
 const token = process.env.token
 export const hypixel_api_key = process.env.hypixel_api_key
-export const desc = 'Bot by NoBypass; v2.4.1; Last updated: 25.12.22; patch 0'
+export const desc = 'Bot by NoBypass; v2.4.2; Last updated: 25.12.22; patch 0'
 export const guildID = '62e15cc48ea8c9296133317f'
 
 export const client = new DiscordJS.Client({

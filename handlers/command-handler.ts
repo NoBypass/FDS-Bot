@@ -1,12 +1,14 @@
 import { Client } from "discord.js";
 import getFiles from './get-files'
+import verifiedUsers from "../schemas/verified-users";
 
-let prefix = '-'
+let prefix = '$'
 
 export default (client: Client) => {
     const commands = {} as {
         [key: string]: any
     }
+    console.log("Prefix: ", prefix)
     
     const suffix = '.ts'
     
@@ -24,6 +26,18 @@ export default (client: Client) => {
     }
     console.log(commands)
     client.on('messageCreate', (message) => {
+        verifiedUsers.updateOne(
+            { memberid: message.member.id },
+            {
+                customstats: {
+                    day: {
+                        $inc: {
+                            messagesSent: 1,
+                        },
+                    }
+                }
+            }
+        )
         if (message.author.bot || !message.content.startsWith(prefix)) {
             return
         }
@@ -33,6 +47,19 @@ export default (client: Client) => {
         if (!commands[commandName]) {
             return
         }
+
+        verifiedUsers.updateOne(
+            { memberid: message.member.id },
+            {
+                customstats: {
+                    day: {
+                        $inc: {
+                            commandsExecuted: 1,
+                        },
+                    }
+                }
+            }
+        )
 
         console.log(message.author.tag + ' used "' + commandName + '" at ' + new Date().toLocaleString())
 
