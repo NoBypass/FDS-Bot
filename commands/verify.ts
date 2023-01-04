@@ -25,7 +25,8 @@ export default {
                 const index = (await indexes).index
                 const indexarr = (await indexes).indexarr
 
-                if (data?.socialMedia?.links?.DISCORD !== message.member.user.tag) return descEmbed('This either is not your account or you have not linked your account with Discord on Hypixel.', message)
+                console.log(data?.player?.socialMedia?.links?.DISCORD, message.member.user.tag)
+                if (data?.player?.socialMedia?.links?.DISCORD as string !== message.member.user.tag as string) return descEmbed('This either is not your account or you have not linked your account with Discord on Hypixel.', message)
 
                 var facepng = 'https://crafatar.com/avatars/' + uuid + '?size=256&default=MHF_Alex&overlay'
 
