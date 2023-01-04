@@ -13,6 +13,7 @@ export default {
 
         fetch('https://api.mojang.com/users/profiles/minecraft/' + args)
             .then(response => response.json())
+            .catch(err => console.log(err))
             .then(async mdata => {
                 var uuid = (mdata as any).id
 
