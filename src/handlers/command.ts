@@ -9,10 +9,13 @@ import underline from 'chalk'
 import green from 'chalk'
 import greenBg from 'chalk'
 import black from 'chalk'
+import red from 'chalk'
+import yellow from 'chalk'
 
 module.exports = (client: Client) => {
   const commands: SlashCommandBuilder[] = []
   const commandsDir = join(__dirname, '../commands')
+  const { TOKEN, CLIENT_ID } = process.env
 
   readdirSync(commandsDir).forEach((file) => {
     if (!file.endsWith('.ts')) return
@@ -21,14 +24,14 @@ module.exports = (client: Client) => {
     commands.push(command.command)
     client.slashCommands.set(command.command.name, command)
   })
-  const rest = new REST({ version: '10' }).setToken(process.env.TOKEN)
+  const rest = new REST({ version: '10' }).setToken(TOKEN)
 
   log(underline(blue('Commands:')))
   commands.forEach((command) => {
-    log(`&c:yellow;Command '/${command.name}' registered`)
+    log(yellow(`Command '/${command.name}' registered`))
   })
   rest
-    .put(Routes.applicationCommands(process.env.CLIENT_ID), {
+    .put(Routes.applicationCommands(CLIENT_ID), {
       body: commands.map((command) => command.toJSON()),
     })
     .then(() => {
@@ -44,6 +47,6 @@ module.exports = (client: Client) => {
       )
     })
     .catch(() => {
-      log('&c:red;Encountered error during registration')
+      log(red('Encountered error during registration'))
     })
 }
