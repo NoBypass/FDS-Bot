@@ -1,14 +1,11 @@
-import { ButtonBuilder } from '@discordjs/builders'
+import { ButtonBuilder, ModalBuilder } from '@discordjs/builders'
 import {
   CommandInteraction,
   Collection,
-  PermissionResolvable,
-  Message,
   AutocompleteInteraction,
   SlashCommandBuilder,
-  User,
-  Channel,
   ButtonInteraction,
+  ModalSubmitInteraction,
 } from 'discord.js'
 import { JwtResponse } from './api'
 
@@ -23,6 +20,11 @@ export interface Button {
   button: ButtonBuilder
   execute: (interaction: ButtonInteraction) => void
   cooldown?: number
+}
+
+export interface Modal {
+  modal: ModalBuilder
+  execute: (interaction: ModalSubmitInteraction) => void
 }
 
 export interface BotEvent {

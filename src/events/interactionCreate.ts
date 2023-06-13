@@ -1,5 +1,6 @@
 import { Interaction } from 'discord.js'
 import { BotEvent } from '../types/discord'
+import checkCooldown from '../lib/cooldown'
 
 const event: BotEvent = {
   name: 'interactionCreate',
@@ -8,46 +9,28 @@ const event: BotEvent = {
       const command = interaction.client.slashCommands.get(
         interaction.commandName,
       )
-      const cooldown = interaction.client.cooldowns.get(
-        `${interaction.commandName}-${interaction.user.username}`,
-      )
       if (!command) return
-      if (command.cooldown && cooldown) {
-        if (Date.now() < cooldown) {
-          interaction.reply(
-            `You have to wait ${Math.floor(
-              Math.abs(Date.now() - cooldown) / 1000,
-            )} second(s) to use this command again.`,
-          )
-          setTimeout(() => interaction.deleteReply(), 5000)
-          return
-        }
-        interaction.client.cooldowns.set(
+
+      if (
+        command.cooldown &&
+        checkCooldown(
           `${interaction.commandName}-${interaction.user.username}`,
-          Date.now() + command.cooldown * 1000,
+          interaction,
+          command.cooldown,
         )
-        setTimeout(() => {
-          interaction.client.cooldowns.delete(
-            `${interaction.commandName}-${interaction.user.username}`,
-          )
-        }, command.cooldown * 1000)
-      } else if (command.cooldown && !cooldown) {
-        interaction.client.cooldowns.set(
-          `${interaction.commandName}-${interaction.user.username}`,
-          Date.now() + command.cooldown * 1000,
-        )
-      }
+      )
+        return
+
       command.execute(interaction)
     } else if (interaction.isAutocomplete()) {
       const command = interaction.client.slashCommands.get(
         interaction.commandName,
       )
-      if (!command) {
-        console.error(
+      if (!command)
+        return console.error(
           `No command matching ${interaction.commandName} was found.`,
         )
-        return
-      }
+
       try {
         if (!command.autocomplete) return
         command.autocomplete(interaction)
@@ -55,7 +38,20 @@ const event: BotEvent = {
         console.error(error)
       }
     } else if (interaction.isButton()) {
-      
+      const button = interaction.client.buttons.get(interaction.customId)
+      if (!button) return
+
+      if (
+        button.cooldown &&
+        checkCooldown(
+          `${interaction.customId}-${interaction.user.username}`,
+          interaction,
+          button.cooldown,
+        )
+      )
+        return
+
+      button.execute(interaction)
     }
   },
 }

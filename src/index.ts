@@ -6,7 +6,6 @@ import { join } from 'path'
 import { log } from 'console'
 import black from 'chalk'
 import bgBlue from 'chalk'
-import { JwtResponse } from './types/api'
 import { login } from './lib/api'
 
 const { Guilds, MessageContent, GuildMessages, GuildMembers } =
@@ -28,5 +27,4 @@ readdirSync(handlersDir).forEach((handler) => {
   require(`${handlersDir}/${handler}`)(client)
 })
 
-export const auth: JwtResponse = await login('FDS-Bot', process.env.TOKEN)
 client.login(process.env.TOKEN)
