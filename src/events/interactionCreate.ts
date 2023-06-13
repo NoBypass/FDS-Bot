@@ -54,6 +54,8 @@ const event: BotEvent = {
       } catch (error) {
         console.error(error)
       }
+    } else if (interaction.isButton()) {
+      
     }
   },
 }

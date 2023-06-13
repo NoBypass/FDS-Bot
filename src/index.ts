@@ -1,5 +1,5 @@
 import { Client, Collection, GatewayIntentBits } from 'discord.js'
-import { Command, SlashCommand } from './types/discord'
+import { Button, SlashCommand } from './types/discord'
 import { config } from 'dotenv'
 import { readdirSync } from 'fs'
 import { join } from 'path'
@@ -18,8 +18,9 @@ config()
 
 log(bgBlue(black('\n FDS Bot v2 is starting ')))
 client.slashCommands = new Collection<string, SlashCommand>()
-client.commands = new Collection<string, Command>()
 client.cooldowns = new Collection<string, number>()
+client.buttons = new Collection<string, Button>()
+client.auth = await login('FDS-Bot', process.env.TOKEN)
 
 const handlersDir = join(__dirname, './src/handlers')
 readdirSync(handlersDir).forEach((handler) => {

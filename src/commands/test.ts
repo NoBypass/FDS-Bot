@@ -4,9 +4,9 @@ import { EmbedBuilder } from "@discordjs/builders"
 
 const command: SlashCommand = {
     command: new SlashCommandBuilder()
-    .setName('test')
-    .setDescription('Shows the bots ping and tests slash commands')
-    .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages),
+        .setName('test')
+        .setDescription('Shows the bots ping and tests slash commands')
+        .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages),
 
     execute: interaction => {
         const embed = new EmbedBuilder()

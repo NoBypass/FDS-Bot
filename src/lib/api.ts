@@ -1,4 +1,4 @@
-import { auth } from '..'
+import { client } from '..'
 import { JwtResponse, MojangAccountWithHypixelPlayer } from '../types/api'
 import { FlatNumberObject } from '../types/common'
 import { HypixelPlayer, MojangAccount, PlayedWith } from '../types/data'
@@ -11,7 +11,7 @@ const graphqlCall = async <T> (query: string, schema: string): Promise<Partial<T
         body: `${query} {\n${schema}}`,
         headers: {
             'Content-Type': 'application/graphql',
-            'Authorization': `Bearer ${auth.token}`
+            'Authorization': `Bearer ${client.auth.token}`
         }
     }).then(res => res.json())
 }
@@ -22,7 +22,7 @@ const postCall = async (body: string, route: string): Promise<any> => {
         body: body,
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${auth.token}`
+            'Authorization': `Bearer ${client.auth.token}`
         }
     }).then(res => res.json())
 }

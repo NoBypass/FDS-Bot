@@ -1,3 +1,4 @@
+import { ButtonBuilder } from '@discordjs/builders'
 import {
   CommandInteraction,
   Collection,
@@ -7,7 +8,9 @@ import {
   SlashCommandBuilder,
   User,
   Channel,
+  ButtonInteraction,
 } from 'discord.js'
+import { JwtResponse } from './api'
 
 export interface SlashCommand {
   command: SlashCommandBuilder | any
@@ -16,11 +19,9 @@ export interface SlashCommand {
   cooldown?: number
 }
 
-export interface Command {
-  name: string
-  execute: (message: Message, args: Array<string>) => void
-  permissions: Array<PermissionResolvable>
-  aliases: Array<string>
+export interface Button {
+  button: ButtonBuilder
+  execute: (interaction: ButtonInteraction) => void
   cooldown?: number
 }
 
@@ -33,7 +34,8 @@ export interface BotEvent {
 declare module 'discord.js' {
   export interface Client {
     slashCommands: Collection<string, SlashCommand>
-    commands: Collection<string, Command>
     cooldowns: Collection<string, number>
+    buttons: Collection<string, Button>
+    auth: JwtResponse
   }
 }
