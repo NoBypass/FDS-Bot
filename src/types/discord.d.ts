@@ -5,6 +5,8 @@ import {
   Message,
   AutocompleteInteraction,
   SlashCommandBuilder,
+  User,
+  Channel,
 } from 'discord.js'
 
 export interface SlashCommand {
