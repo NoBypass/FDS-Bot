@@ -1,14 +1,14 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { SlashCommand } from '../types/discord'
 import { PermissionFlagsBits } from 'discord.js'
-import { errLog, sendMsgByInteraction } from '../lib/common'
+import { sendMsgByInteraction } from '../lib/common'
 import { api } from '../lib/api'
-import { DiscordUser, HypixelPlayer, LinkedWith, MojangAccount, User } from '../types/data'
+import { HypixelPlayer, MojangAccount } from '../types/data'
 import { isBooleanObject, isNumberObject } from 'util/types'
 
 const command: SlashCommand = {
     command: new SlashCommandBuilder()
-    .setName('verify')
+    .setName('verifyMenu')
     .setDescription('Verify and link your account with Hypixel')
     .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages)
     .addStringOption(option => option
@@ -28,22 +28,25 @@ const command: SlashCommand = {
             if (mojangAccount == null) {
                 mojangAccount = await api.add.mojangAccount(ign, '')
                 if (!mojangAccount) return sendMsgByInteraction(interaction, `No Mojang account with name **${ign}** could be found.`)
-            } else if (mojangAccount.playedWith == null) {
+            }
+            if (mojangAccount.playedWith == null) {
                 hypixelPlayer = await api.add.hypixelPlayer('id')
                 if (hypixelPlayer.id == null || mojangAccount.id == null) return interaction.reply({
                         content: 'This error is not supposed to be possible wtf',
                         ephemeral: true
                 })
-                
+
                 await api.connect.mojangAccountWithHypixelPlayer({
                     hypixelPlayerId: hypixelPlayer.id,
                     mojangAccountId: mojangAccount.id
                 }, '')
             }
             
-            
         } catch (error) {
-            
+            interaction.reply({
+                content: 'An unexpected error occurred while talking to the API. Please try again later.',
+                ephemeral: true
+            })
         }
 
 
