@@ -1,20 +1,20 @@
-import {PermissionFlagsBits, SlashCommandBuilder} from 'discord.js'
-import {SlashCommand} from '../types/discord'
+import { PermissionFlagsBits, SlashCommandBuilder } from 'discord.js'
+import { SlashCommand } from '../types/discord'
 import htmlToImage from 'html-to-image'
 import { EmbedBuilder } from '@discordjs/builders'
 
 const ProfileCommand: SlashCommand = {
-    command: new SlashCommandBuilder()
-        .setName('profile')
-        .setDescription('View your server stats')
-        .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages),
+  command: new SlashCommandBuilder()
+    .setName('profile')
+    .setDescription('View your server stats')
+    .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages),
 
-    execute: interaction => {
-        const embed = new EmbedBuilder()
-        const measurements = { width: 800, height: 300 }
-        const { totalXp, level } = { totalXp: 5, level: 5 } // TODO link with database for guild xp and just for giving the xp
-        const { levelXp, xpToGet } = { levelXp: 5, xpToGet: 5 } // TODO
-        const html: any = `
+  execute: (interaction) => {
+    const embed = new EmbedBuilder()
+    const measurements = { width: 800, height: 300 }
+    const { totalXp, level } = { totalXp: 5, level: 5 } // TODO link with database for guild xp and just for giving the xp
+    const { levelXp, xpToGet } = { levelXp: 5, xpToGet: 5 } // TODO
+    const html: any = `
             <style>
                 .main {
                     width: ${measurements.width};
@@ -38,14 +38,15 @@ const ProfileCommand: SlashCommand = {
             </div>
         `
 
-        htmlToImage.toPng(html, measurements)
-            .then((dataUrl: string) => {
-                embed.setImage(dataUrl)
-            })
-            .catch((error: Error) => console.error(error))
-        embed.setTitle(`${interaction.user.username} is level ${level}`)
-    },
-    cooldown: 10
+    htmlToImage
+      .toPng(html, measurements)
+      .then((dataUrl: string) => {
+        embed.setImage(dataUrl)
+      })
+      .catch((error: Error) => console.error(error))
+    embed.setTitle(`${interaction.user.username} is level ${level}`)
+  },
+  cooldown: 10,
 }
 
 export default ProfileCommand

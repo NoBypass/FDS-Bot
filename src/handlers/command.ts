@@ -11,7 +11,7 @@ module.exports = (client: Client) => {
 
   const commands: SlashCommandBuilder[] = []
   const commandsDir = join(__dirname, '../commands')
-  
+
   readdirSync(commandsDir).forEach((file) => {
     if (!file.endsWith('.ts')) return
     // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -20,15 +20,23 @@ module.exports = (client: Client) => {
       client.slashCommands.set(command.command.name, command)
       commands.push(command.command)
     } catch (error) {
-      log(chalk.red(`Failed to register ${chalk.bold(`'${commandsDir}/${file}'`)}`))
+      log(
+        chalk.red(
+          `Failed to register ${chalk.bold(`'${commandsDir}/${file}'`)}`,
+        ),
+      )
     }
   })
 
   const { TOKEN, CLIENT_ID } = process.env
   const rest = new REST({ version: '10' }).setToken(TOKEN)
-  
+
   commands.forEach((command) => {
-    log(chalk.green(`Command '${chalk.yellow.bold('/'+command.name)}' registered`))
+    log(
+      chalk.green(
+        `Command '${chalk.yellow.bold('/' + command.name)}' registered`,
+      ),
+    )
   })
   rest
     .put(Routes.applicationCommands(CLIENT_ID), {
@@ -36,9 +44,11 @@ module.exports = (client: Client) => {
     })
     .then(() => {
       log(
-    chalk.green(`Successfully loaded ${chalk.bold.underline(` ${commands.length} `)} command${
-      commands.length == 1 ? '' : 's'
-    }`),
+        chalk.green(
+          `Successfully loaded ${chalk.bold.underline(
+            ` ${commands.length} `,
+          )} command${commands.length == 1 ? '' : 's'}`,
+        ),
       )
     })
     .catch(() => {

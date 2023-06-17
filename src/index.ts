@@ -20,9 +20,10 @@ client.cooldowns = new Collection<string, number>()
 client.buttons = new Collection<string, Button>()
 // client.auth = await login('FDS-Bot', process.env.TOKEN)
 
-const handlersDir = join(__dirname, "./handlers")
-readdirSync(handlersDir).forEach(handler => {
-    require(`${handlersDir}/${handler}`)(client)
+const handlersDir = join(__dirname, './handlers')
+readdirSync(handlersDir).forEach((handler) => {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  require(`${handlersDir}/${handler}`)(client)
 })
 
 client.login(process.env.TOKEN)

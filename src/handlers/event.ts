@@ -21,8 +21,10 @@ module.exports = (client: Client) => {
     log(chalk.green(`Event '${chalk.yellow.bold(event.name)}' registered`))
   })
   log(
-    chalk.green(`Successfully loaded ${chalk.bold.underline(` ${eventCount} `)} event${
-      eventCount == 1 ? '' : 's'
-    }`),
+    chalk.green(
+      `Successfully loaded ${chalk.bold.underline(` ${eventCount} `)} event${
+        eventCount == 1 ? '' : 's'
+      }`,
+    ),
   )
 }
