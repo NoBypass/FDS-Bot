@@ -2,7 +2,7 @@ import { SlashCommandBuilder, PermissionFlagsBits } from 'discord.js'
 import { SlashCommand } from '../types/discord'
 import { EmbedBuilder } from '@discordjs/builders'
 
-const command: SlashCommand = {
+const TestCommand: SlashCommand = {
   command: new SlashCommandBuilder()
     .setName('test')
     .setDescription('Shows the bots ping and tests slash commands')
@@ -13,9 +13,10 @@ const command: SlashCommand = {
       .setColor(0x0099ff)
       .setTitle('Test successful')
       .setDescription(`Test successful, Ping: ${interaction.client.ws.ping}`)
-    return interaction.channel?.send({ embeds: [embed] })
+
+    return interaction.reply({ embeds: [embed] })
   },
   cooldown: 10,
 }
 
-export default command
+export default TestCommand

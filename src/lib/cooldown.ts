@@ -15,7 +15,7 @@ const checkCooldown = (
         ephemeral: true,
       })
       setTimeout(() => interaction.deleteReply(), 5000)
-      return false
+      return true
     }
 
     interaction.client.cooldowns.set(key, Date.now() + itemCooldown * 1000)
@@ -26,7 +26,7 @@ const checkCooldown = (
     interaction.client.cooldowns.set(key, Date.now() + itemCooldown * 1000)
   }
 
-  return true
+  return false
 }
 
 export default checkCooldown

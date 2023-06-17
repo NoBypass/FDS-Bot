@@ -33,11 +33,30 @@ export interface BotEvent {
   execute: (...args: any[]) => void
 }
 
+export interface Attachment {
+  files: {
+    attachment: string
+    name: string
+  }[]
+}
+
 declare module 'discord.js' {
   export interface Client {
     slashCommands: Collection<string, SlashCommand>
     cooldowns: Collection<string, number>
     buttons: Collection<string, Button>
     auth: JwtResponse
+  }
+}
+
+declare global {
+  namespace NodeJS {
+    interface ProcessEnv {
+      TOKEN: string
+      API_URI: string
+      API_VERSION: string
+      CLIENT_ID: string
+      ERROR_CHANNEL_ID: string
+    }
   }
 }

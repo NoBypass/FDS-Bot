@@ -4,31 +4,31 @@ import { readdirSync } from 'fs'
 import { join } from 'path'
 import { SlashCommand } from '../types/discord'
 import { log } from 'console'
-import blue from 'chalk'
-import underline from 'chalk'
-import green from 'chalk'
-import greenBg from 'chalk'
-import black from 'chalk'
-import red from 'chalk'
-import yellow from 'chalk'
+import chalk from 'chalk'
 
 module.exports = (client: Client) => {
+  log(chalk.underline.magenta('\nCommands:\n'))
+
   const commands: SlashCommandBuilder[] = []
   const commandsDir = join(__dirname, '../commands')
-  const { TOKEN, CLIENT_ID } = process.env
-
+  
   readdirSync(commandsDir).forEach((file) => {
     if (!file.endsWith('.ts')) return
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const command: SlashCommand = require(`${commandsDir}/${file}`).default
-    commands.push(command.command)
-    client.slashCommands.set(command.command.name, command)
+    try {
+      client.slashCommands.set(command.command.name, command)
+      commands.push(command.command)
+    } catch (error) {
+      log(chalk.red(`Failed to register ${chalk.bold(`'${commandsDir}/${file}'`)}`))
+    }
   })
-  const rest = new REST({ version: '10' }).setToken(TOKEN)
 
-  log(underline(blue('Commands:')))
+  const { TOKEN, CLIENT_ID } = process.env
+  const rest = new REST({ version: '10' }).setToken(TOKEN)
+  
   commands.forEach((command) => {
-    log(yellow(`Command '/${command.name}' registered`))
+    log(chalk.green(`Command '${chalk.yellow.bold('/'+command.name)}' registered`))
   })
   rest
     .put(Routes.applicationCommands(CLIENT_ID), {
@@ -36,17 +36,12 @@ module.exports = (client: Client) => {
     })
     .then(() => {
       log(
-        green('Successfully loaded ') +
-          greenBg(
-            black(
-              `${commands.length} &s:reset;&c:green; command${
-                commands.length == 1 ? '' : 's'
-              }`,
-            ),
-          ),
+    chalk.green(`Successfully loaded ${chalk.bold.underline(` ${commands.length} `)} command${
+      commands.length == 1 ? '' : 's'
+    }`),
       )
     })
     .catch(() => {
-      log(red('Encountered error during registration'))
+      log(chalk.red('Encountered error during registration'))
     })
 }
