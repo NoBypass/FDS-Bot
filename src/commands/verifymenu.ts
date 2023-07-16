@@ -10,15 +10,9 @@ import verifyButton from '../components/buttons/verifyButton'
 
 const VerifyCommand: SlashCommand = {
   command: new SlashCommandBuilder()
-    .setName('_verify')
+    .setName('verifymenu')
     .setDescription('Verify and link your account with Hypixel')
-    .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages)
-    .addStringOption((option) =>
-      option
-        .setName('username')
-        .setDescription('Your Minecraft username')
-        .setRequired(true),
-    ),
+    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 
   execute: async (interaction) => {
     interaction.channel?.send({
