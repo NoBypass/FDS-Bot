@@ -9,3 +9,7 @@ export const getTotalXp = (level: number, xp: number) => {
   }
   return xp
 }
+
+export const isLevelUp = (xp: number, level: number): boolean => {
+  return xp >= getNeededXp(level)
+}
