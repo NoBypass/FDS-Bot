@@ -18,7 +18,8 @@ const verificationModel: Modal = {
       new ActionRowBuilder<TextInputBuilder>().addComponents(
         new TextInputBuilder()
           .setCustomId('username')
-          .setPlaceholder('Your Minecraft username')
+          .setLabel('Minecraft username')
+          .setPlaceholder('e.g. Notch')
           .setMinLength(1)
           .setMaxLength(16)
           .setRequired(true)

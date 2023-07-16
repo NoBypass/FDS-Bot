@@ -12,7 +12,13 @@ const VerifyCommand: SlashCommand = {
   command: new SlashCommandBuilder()
     .setName('_verify')
     .setDescription('Verify and link your account with Hypixel')
-    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
+    .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages)
+    .addStringOption((option) =>
+      option
+        .setName('username')
+        .setDescription('Your Minecraft username')
+        .setRequired(true),
+    ),
 
   execute: async (interaction) => {
     interaction.channel?.send({
