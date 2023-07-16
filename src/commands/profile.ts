@@ -2,6 +2,7 @@ import { PermissionFlagsBits, SlashCommandBuilder } from 'discord.js'
 import { SlashCommand } from '../types/discord'
 import htmlToImage from 'html-to-image'
 import { EmbedBuilder } from '@discordjs/builders'
+import { toPng } from 'html-to-image'
 
 const ProfileCommand: SlashCommand = {
   command: new SlashCommandBuilder()
@@ -38,8 +39,7 @@ const ProfileCommand: SlashCommand = {
             </div>
         `
 
-    htmlToImage
-      .toPng(html, measurements)
+    toPng(html, measurements)
       .then((dataUrl: string) => {
         embed.setImage(dataUrl)
       })

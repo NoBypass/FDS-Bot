@@ -57,6 +57,9 @@ declare global {
       API_VERSION: string
       CLIENT_ID: string
       ERROR_CHANNEL_ID: string
+      DB_PASSWORD: string
+      DB_USERNAME: string
+      DB_NAME: string
     }
   }
 }

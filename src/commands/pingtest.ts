@@ -4,7 +4,7 @@ import { EmbedBuilder } from '@discordjs/builders'
 
 const TestCommand: SlashCommand = {
   command: new SlashCommandBuilder()
-    .setName('test')
+    .setName('pingtest')
     .setDescription('Shows the bots ping and tests slash commands')
     .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages),
 

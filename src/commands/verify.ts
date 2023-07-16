@@ -6,22 +6,16 @@ import {
 } from '@discordjs/builders'
 import { SlashCommand } from '../types/discord'
 import { PermissionFlagsBits } from 'discord.js'
-import verifyButton from '../components/button/verifyButton'
+import verifyButton from '../components/buttons/verifyButton'
 
 const VerifyCommand: SlashCommand = {
   command: new SlashCommandBuilder()
-    .setName('verifymenu')
+    .setName('_verify')
     .setDescription('Verify and link your account with Hypixel')
-    .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages)
-    .addStringOption((option) =>
-      option
-        .setName('username')
-        .setDescription('Your Minecraft username')
-        .setRequired(true),
-    ),
+    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 
   execute: async (interaction) => {
-    interaction.reply({
+    interaction.channel?.send({
       embeds: [
         new EmbedBuilder()
           .setTitle('Verify your Minecraft account')

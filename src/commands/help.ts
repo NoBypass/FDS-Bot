@@ -17,7 +17,8 @@ const HelpCommand: SlashCommand = {
       if (!file.endsWith('.ts')) return
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const command: SlashCommand = require(`${commandsDir}/${file}`).default
-      commands.push(command.command)
+      if (!(command.command.name as string).startsWith('_'))
+        commands.push(command.command)
     })
 
     const embed = new EmbedBuilder()

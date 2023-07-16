@@ -13,7 +13,7 @@ import { isBooleanObject, isNumberObject } from 'util/types'
 const verificationModel: Modal = {
   modal: new ModalBuilder()
     .setTitle('Verify your Minecraft account')
-    .setCustomId('minecraftNameModal')
+    .setCustomId('ign_modal')
     .addComponents(
       new ActionRowBuilder<TextInputBuilder>().addComponents(
         new TextInputBuilder()
