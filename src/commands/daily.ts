@@ -31,7 +31,8 @@ const DailyCommand: SlashCommand = {
         ephemeral: true,
       })
     }
-    const hasLostStreak = new Date().getTime() - lastClaimed > 86400000
+    const hasLostStreak =
+      new Date().getTime() - lastClaimed > 86400000 && user.streak > 1
     const randomized = Math.random() * 500
     const xpToGive = Math.round(
       randomized + (randomized / 100) * 5 * user.streak,
