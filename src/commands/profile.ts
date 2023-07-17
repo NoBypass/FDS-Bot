@@ -3,6 +3,7 @@ import { SlashCommand } from '../types/discord'
 import generateImageFromHtml from '../lib/image'
 import { MainModel } from '../database/schema'
 import { getNeededXp, getTotalXp } from '../lib/leveling'
+import { formatNick, getMemberByInteraction } from '../lib/discord'
 
 const ProfileCommand: SlashCommand = {
   command: new SlashCommandBuilder()
@@ -16,8 +17,7 @@ const ProfileCommand: SlashCommand = {
         .setRequired(false),
     ),
   execute: async (interaction) => {
-    const id = interaction.options.getUser('user')?.id || interaction.user.id
-    const member = await interaction.guild?.members.fetch(id)
+    const member = await getMemberByInteraction(interaction)
     if (!member) {
       return interaction.reply({
         content: `User not found`,
@@ -25,9 +25,8 @@ const ProfileCommand: SlashCommand = {
       })
     }
 
-    const nick = member?.nickname || ''
     const measurements = { width: 800, height: 174 }
-    const dbEntry = await MainModel.findOne({ memberid: id })
+    const dbEntry = await MainModel.findOne({ memberid: member.id })
     if (!dbEntry) {
       return interaction.reply({
         content:
@@ -42,7 +41,7 @@ const ProfileCommand: SlashCommand = {
 
     const html = `
       <main>
-        <h1>${nick.split('[')[0]} is level <b>${level}</b></h1>
+        <h1>${formatNick(member)} is level <b>${level}</b></h1>
         <div class="bar" >
             <div class="completed" />
         </div>

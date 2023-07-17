@@ -2,6 +2,7 @@ import { PermissionFlagsBits, SlashCommandBuilder } from 'discord.js'
 import { SlashCommand } from '../types/discord'
 import { EmbedBuilder } from '@discordjs/builders'
 import { MainModel } from '../database/schema'
+import { formatNick, getMemberByInteraction } from '../lib/discord'
 
 const DailyCommand: SlashCommand = {
   command: new SlashCommandBuilder()
@@ -10,6 +11,7 @@ const DailyCommand: SlashCommand = {
     .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages),
 
   execute: async (interaction) => {
+    const member = await getMemberByInteraction(interaction)
     const user = await MainModel.findOne({
       memberid: interaction.user.id,
     })
@@ -37,8 +39,10 @@ const DailyCommand: SlashCommand = {
     const embed = new EmbedBuilder()
       .setTitle(
         hasLostStreak
-          ? `${interaction.user.username} lost their streak but gained **+${xpToGive}** xp`
-          : `${interaction.user.username} ${
+          ? `${formatNick(
+              member,
+            )} lost their streak but gained **+${xpToGive}** xp`
+          : `${formatNick(member)} ${
               xpToGive < 400 && xpToGive > 100
                 ? 'claimed their daily reward'
                 : `got ${xpToGive > 450 || xpToGive < 50 ? 'very' : ''} ${
