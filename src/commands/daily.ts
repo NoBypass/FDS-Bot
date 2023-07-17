@@ -22,6 +22,7 @@ const DailyCommand: SlashCommand = {
         ephemeral: true,
       })
     }
+
     const lastClaimed = user.lastclaimed
     const isSameDay = new Date(lastClaimed).getDate() == new Date().getDate()
     if (isSameDay) {
@@ -55,13 +56,8 @@ const DailyCommand: SlashCommand = {
           ? `Streak of \`\`${
               user.streak
             }\`\` was lost (streak started on ${new Date(
-              new Date(new Date().getTime() - user.streak * 86400000).getDate(),
-            ).toLocaleDateString('en-US', {
-              weekday: 'short',
-              year: 'numeric',
-              month: 'short',
-              day: 'numeric',
-            })})`
+              new Date().getTime() - user.streak * 86400000,
+            ).toLocaleDateString()})`
           : `Received **+${xpToGive}** xp\nCurrent streak: \`\`${
               user.streak + 1
             }\`\``,
