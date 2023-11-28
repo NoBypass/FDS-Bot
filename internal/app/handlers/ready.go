@@ -5,6 +5,6 @@ import (
 	"log"
 )
 
-func Ready(s *discordgo.Session, r *discordgo.Ready) {
+func Ready(s *discordgo.Session, _ *discordgo.Ready) {
 	log.Printf("Logged in as: %v#%v", s.State.User.Username, s.State.User.Discriminator)
 }
