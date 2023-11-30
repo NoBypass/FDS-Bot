@@ -5,20 +5,13 @@ import (
 	"github.com/bwmarrin/discordgo"
 	"github.com/nobypass/fds-bot/internal/pkg/helpers"
 	"math/rand"
-	"strings"
 )
 
-var Teams = &discordgo.ApplicationCommand{
-	Name:        "teams",
-	Description: "Generate random teams",
-	Version:     "v1.0.1",
+var VCTeams = &discordgo.ApplicationCommand{
+	Name:        "vcteams",
+	Description: "Generate random teams from the members in your voice channel",
+	Version:     "v1.0.0",
 	Options: []*discordgo.ApplicationCommandOption{
-		{
-			Name:        "players",
-			Description: "List of players seperated by a space",
-			Type:        discordgo.ApplicationCommandOptionString,
-			Required:    true,
-		},
 		{
 			Name:        "teams",
 			Description: "Number of teams (default: 2)",
@@ -36,13 +29,10 @@ var Teams = &discordgo.ApplicationCommand{
 	},
 }
 
-func TeamsHandler(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+var VCTeamsHandler = func(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	om := helpers.OptionMap(i.ApplicationCommandData().Options)
-	playersStr := om["players"].(string)
 	teamAmount, tOk := om["teams"].(float64)
 	memberAmount, mOk := om["members"].(float64)
-	players := strings.Split(playersStr, " ")
-	playerAmount := len(players)
 
 	if tOk && mOk {
 		return fmt.Errorf("cannot define both memberAmount and teamAmount")
@@ -50,17 +40,40 @@ func TeamsHandler(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 		teamAmount = 2
 	}
 
+	userID := i.Member.User.ID
+	guildID := i.GuildID
+	voiceState, err := s.State.VoiceState(guildID, userID)
+	if err != nil {
+		return err
+	}
+	voiceChannelID := voiceState.ChannelID
+	guild, err := s.State.Guild(guildID)
+	if err != nil {
+		return err
+	}
+
+	var members []string
+	for _, vs := range guild.VoiceStates {
+		if vs.ChannelID == voiceChannelID {
+			member, err := s.State.Member(guildID, vs.UserID)
+			if err != nil {
+				return err
+			}
+			members = append(members, member.Nick)
+		}
+	}
+
 	var teams [][]string
 	if memberAmount != 0 {
-		teams = make([][]string, playerAmount/int(memberAmount))
+		teams = make([][]string, len(members)/int(memberAmount))
 	} else {
 		teams = make([][]string, int(teamAmount))
 	}
 
-	rand.Shuffle(len(players), func(i, j int) {
-		players[i], players[j] = players[j], players[i]
+	rand.Shuffle(len(members), func(i, j int) {
+		members[i], members[j] = members[j], members[i]
 	})
-	for i, player := range players {
+	for i, player := range members {
 		teams[i%len(teams)] = append(teams[i%len(teams)], player)
 	}
 
