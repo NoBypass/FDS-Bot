@@ -17,6 +17,7 @@ func (b *Bot) Shutdown() {
 			if err != nil {
 				log.Panicf("Cannot delete '%v' command: %v", v.Name, err)
 			}
+			log.Printf("Deleted '%v' command", v.Name)
 		}
 	}
 

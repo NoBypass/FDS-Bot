@@ -8,19 +8,26 @@ import (
 )
 
 var commandHandlers = map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate) error{
-	"ping":  cmds.PingHandler,
-	"teams": cmds.TeamsHandler,
+	"ping":    cmds.PingHandler,
+	"teams":   cmds.TeamsHandler,
+	"vcteams": cmds.VCTeamsHandler,
+	"admin":   cmds.AdminHandler,
 }
 
 var commands = []*discordgo.ApplicationCommand{
 	cmds.Ping,
 	cmds.Teams,
+	cmds.VCTeams,
+	cmds.Admin,
 }
 
 func RegisterCommands(s *discordgo.Session) {
-	_, err := s.ApplicationCommandBulkOverwrite(s.State.User.ID, "", commands)
-	if err != nil {
-		log.Fatalf("Cannot register commands: %v", err)
+	for _, c := range commands {
+		_, err := s.ApplicationCommandCreate(s.State.User.ID, "", c)
+		if err != nil {
+			log.Fatalf("Cannot register command %v: %v", c.Name, err)
+		}
+		log.Printf("Registered command %v", c.Name)
 	}
 }
 

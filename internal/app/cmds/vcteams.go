@@ -29,7 +29,7 @@ var VCTeams = &discordgo.ApplicationCommand{
 	},
 }
 
-var VCTeamsHandler = func(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func VCTeamsHandler(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	om := helpers.OptionMap(i.ApplicationCommandData().Options)
 	teamAmount, tOk := om["teams"].(float64)
 	memberAmount, mOk := om["members"].(float64)

@@ -29,11 +29,13 @@ func init() {
 		log.Fatalf("Invalid bot parameters: %v", err)
 	}
 	b.Session = s
+	log.Println("Session created")
 
 	err = s.Open()
 	if err != nil {
 		log.Fatalf("Cannot open the session: %v", err)
 	}
+	log.Println("Session opened")
 }
 
 func main() {
