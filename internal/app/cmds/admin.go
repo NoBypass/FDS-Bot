@@ -41,7 +41,7 @@ func AdminHandler(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 			Embeds: []*discordgo.MessageEmbed{
 				{
 					Title:       "Region Selector",
-					Color:       consts.Purple,
+					Color:       consts.EmbedColor,
 					Description: "*Pick the region closest to you.*",
 				},
 			},

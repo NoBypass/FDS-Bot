@@ -1,3 +1,3 @@
 package consts
 
-const Purple = 0x9b59b6
+const EmbedColor = 0x2B2D31
