@@ -31,18 +31,11 @@ func RegisterCommands(s *discordgo.Session) {
 	}
 }
 
-func Commands(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	defer func() {
-		if r := recover(); r != nil {
-			respondErr(s, i, fmt.Errorf("(recovered) panic: %v", r))
-		}
-	}()
-
+func handleCommand(s *discordgo.Session, i *discordgo.InteractionCreate) {
 	if h, ok := commandHandlers[i.ApplicationCommandData().Name]; ok {
 		err := h(s, i)
 		if err != nil {
-			respondErr(s, i, err)
-			return
+			panic(err)
 		}
 	}
 }

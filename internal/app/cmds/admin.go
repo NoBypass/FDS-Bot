@@ -21,8 +21,12 @@ var Admin = &discordgo.ApplicationCommand{
 			Required:    false,
 			Choices: []*discordgo.ApplicationCommandOptionChoice{
 				{
-					Name:  "region_selector",
-					Value: "region_selector",
+					Name:  "verify",
+					Value: "verify",
+				},
+				{
+					Name:  "test",
+					Value: "test",
 				},
 			},
 		},
@@ -31,32 +35,48 @@ var Admin = &discordgo.ApplicationCommand{
 
 func AdminHandler(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	om := helpers.OptionMap(i.ApplicationCommandData().Options)
-	modal := om["modal"].(string)
+	embed := om["embed"].(string)
 
 	var res *discordgo.MessageSend
 
-	switch modal {
-	case "region_selector":
+	switch embed {
+	case "verify":
 		res = &discordgo.MessageSend{
 			Embeds: []*discordgo.MessageEmbed{
 				{
-					Title:       "Region Selector",
+					Title:       "Verify",
 					Color:       consts.EmbedColor,
-					Description: "*Pick the region closest to you.*",
+					Description: "Verify your Discord account by linking it to Hypixel.",
 				},
 			},
 			Components: []discordgo.MessageComponent{
-				discordgo.SelectMenu{
-					CustomID: "region_selector",
-					MenuType: discordgo.StringSelectMenu,
-					Options: []discordgo.SelectMenuOption{
-						{
-							Label: "EU",
-							Value: "eu",
+				discordgo.ActionsRow{
+					Components: []discordgo.MessageComponent{
+						discordgo.Button{
+							CustomID: "verify",
+							Style:    discordgo.SuccessButton,
+							Label:    "Verify",
+							Emoji: discordgo.ComponentEmoji{
+								Name: "🔗",
+							},
 						},
-						{
-							Label: "NA",
-							Value: "na",
+					},
+				},
+			},
+		}
+	case "test":
+		res = &discordgo.MessageSend{
+			Content: "Test",
+			Embed: &discordgo.MessageEmbed{
+				Title: "Test",
+			},
+			Components: []discordgo.MessageComponent{
+				discordgo.ActionsRow{
+					Components: []discordgo.MessageComponent{
+						discordgo.Button{
+							CustomID: "test",
+							Style:    discordgo.PrimaryButton,
+							Label:    "Test",
 						},
 					},
 				},
@@ -64,10 +84,19 @@ func AdminHandler(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 		}
 	default:
 		res = &discordgo.MessageSend{
-			Content: "Invalid modal",
+			Content: "",
 		}
 	}
 
 	_, err := s.ChannelMessageSendComplex(i.ChannelID, res)
-	return err
+	if err != nil {
+		return err
+	}
+	return s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Content: "Message was sent to channel",
+			Flags:   discordgo.MessageFlagsEphemeral,
+		},
+	})
 }

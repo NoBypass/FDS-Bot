@@ -43,7 +43,7 @@ func main() {
 	handlers.RegisterCommands(s)
 
 	s.AddHandler(handlers.Ready)
-	s.AddHandler(handlers.Commands)
+	s.AddHandler(handlers.Interactions)
 
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, os.Interrupt)
