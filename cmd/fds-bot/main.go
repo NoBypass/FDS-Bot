@@ -2,9 +2,11 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"github.com/bwmarrin/discordgo"
 	"github.com/nobypass/fds-bot/internal/app/handlers"
 	"github.com/nobypass/fds-bot/internal/app/lifecycle"
+	"github.com/nobypass/fds-bot/internal/pkg/consts"
 	"log"
 	"os"
 	"os/signal"
@@ -12,7 +14,7 @@ import (
 
 var (
 	s              *discordgo.Session
-	BotToken       = flag.String("token", lifecycle.Config(), "Bot access token")
+	BotToken       = os.Getenv("token")
 	RemoveCommands = flag.Bool("rmcmd", true, "Remove all commands after shutdowning or not")
 	b              = &lifecycle.Bot{
 		Token:          BotToken,
@@ -24,7 +26,7 @@ func init() { flag.Parse() }
 
 func init() {
 	var err error
-	s, err = discordgo.New("Bot " + *BotToken)
+	s, err = discordgo.New("Bot " + BotToken)
 	if err != nil {
 		log.Fatalf("Invalid bot parameters: %v", err)
 	}
@@ -38,8 +40,20 @@ func init() {
 	log.Println("Session opened")
 }
 
+const VERSION = "v3.1.0"
+
 func main() {
 	defer s.Close()
+
+	fmt.Println(`
+   _______  ____   ___       __
+  / __/ _ \/ __/  / _ )___  / /_
+ / _// // /\ \   / _  / _ \/ __/
+/_/ /____/___/  /____/\___/\__/   ` + consts.Purple.Sprint(VERSION) + `
+The FDS Discord bot written in    ` + consts.WhiteOnCyan.Sprint(" GO ") + `
+________________________________________________
+`)
+
 	handlers.RegisterCommands(s)
 
 	s.AddHandler(handlers.Ready)
