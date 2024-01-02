@@ -2,7 +2,7 @@ package cmds
 
 import (
 	"github.com/bwmarrin/discordgo"
-	"github.com/nobypass/fds-bot/internal/app/consts"
+	"github.com/nobypass/fds-bot/internal/pkg/consts"
 	"github.com/nobypass/fds-bot/internal/pkg/helpers"
 )
 

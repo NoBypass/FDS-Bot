@@ -3,7 +3,7 @@ package cmds
 import (
 	"fmt"
 	"github.com/bwmarrin/discordgo"
-	"github.com/nobypass/fds-bot/internal/app/consts"
+	"github.com/nobypass/fds-bot/internal/pkg/consts"
 )
 
 var two = 2.0
