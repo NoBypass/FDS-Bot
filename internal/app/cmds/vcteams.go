@@ -55,7 +55,7 @@ func VCTeamsHandler(s *discordgo.Session, i *discordgo.InteractionCreate) error 
 	var members []string
 	for _, vs := range guild.VoiceStates {
 		if vs.ChannelID == voiceChannelID {
-			member, err := s.State.Member(guildID, vs.UserID)
+			member, err := s.GuildMember(guildID, vs.UserID)
 			if err != nil {
 				return err
 			}
