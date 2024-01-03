@@ -40,7 +40,7 @@ func init() {
 	log.Println("Session opened")
 }
 
-const VERSION = "v3.1.0"
+const VERSION = "v3.2.0"
 
 func main() {
 	defer s.Close()

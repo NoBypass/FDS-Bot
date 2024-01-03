@@ -12,6 +12,7 @@ var commandHandlers = map[string]func(s *discordgo.Session, i *discordgo.Interac
 	"teams":   cmds.TeamsHandler,
 	"vcteams": cmds.VCTeamsHandler,
 	"admin":   cmds.AdminHandler,
+	"play":    cmds.PlayHandler,
 }
 
 var commands = []*discordgo.ApplicationCommand{
@@ -19,6 +20,7 @@ var commands = []*discordgo.ApplicationCommand{
 	cmds.Teams,
 	cmds.VCTeams,
 	cmds.Admin,
+	cmds.Play,
 }
 
 func RegisterCommands(s *discordgo.Session) {
