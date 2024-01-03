@@ -5,6 +5,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 	"github.com/nobypass/fds-bot/internal/pkg/consts"
 	"github.com/nobypass/fds-bot/internal/pkg/helpers"
+	"strings"
 )
 
 const (
@@ -97,7 +98,7 @@ func PlayHandler(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	_, err = s.ChannelMessageSendComplex(ltpChannel.ID, &discordgo.MessageSend{
 		Content: fmt.Sprintf("By: %s to: %s", i.Member.Mention(), gamemodeRole.Mention()),
 		Embed: &discordgo.MessageEmbed{
-			Title: fmt.Sprintf("%s is looking to play %s", i.Member.Nick, gamemode.Value),
+			Title: fmt.Sprintf("%s is looking to play %s", i.Member.Nick, strings.Title(strings.Replace(fmt.Sprint(gamemode.Value), "_", " ", -1))),
 			Description: func() string {
 				if description != nil {
 					return fmt.Sprintf("**Description**\n%v", description.Value)
