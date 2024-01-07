@@ -12,3 +12,5 @@
 ## Environment Variables
 - `token` - Discord bot token
 - `pwd` - Password to log into the FDS Core
+- `api_url` - URL to the FDS Core API
+- `api_pwd` - Password to the FDS Core API

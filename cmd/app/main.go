@@ -1,36 +1,24 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"github.com/bwmarrin/discordgo"
 	"github.com/nobypass/fds-bot/internal/app/handlers"
-	"github.com/nobypass/fds-bot/internal/app/lifecycle"
 	"github.com/nobypass/fds-bot/internal/pkg/consts"
+	"github.com/nobypass/fds-bot/internal/pkg/helpers"
 	"log"
 	"os"
 	"os/signal"
 )
 
-var (
-	s              *discordgo.Session
-	BotToken       = os.Getenv("token")
-	RemoveCommands = flag.Bool("rmcmd", true, "Remove all commands after shutdowning or not")
-	b              = &lifecycle.Bot{
-		Token:          BotToken,
-		RemoveCommands: RemoveCommands,
-	}
-)
-
-func init() { flag.Parse() }
+var s *discordgo.Session
 
 func init() {
 	var err error
-	s, err = discordgo.New("Bot " + BotToken)
+	s, err = discordgo.New("Bot " + os.Getenv("token"))
 	if err != nil {
 		log.Fatalf("Invalid bot parameters: %v", err)
 	}
-	b.Session = s
 	log.Println("Session created")
 
 	err = s.Open()
@@ -44,6 +32,7 @@ const VERSION = "v3.2.0"
 
 func main() {
 	defer s.Close()
+	defer helpers.Shutdown(s)
 
 	fmt.Println(`
    _______  ____   ___       __
@@ -63,6 +52,4 @@ ________________________________________________
 	signal.Notify(stop, os.Interrupt)
 	log.Println("Press Ctrl+C to exit")
 	<-stop
-
-	b.Shutdown()
 }
