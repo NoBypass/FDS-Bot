@@ -13,4 +13,5 @@ func (s *Session) RegisterCommand(command *Command) {
 
 func (s *Session) RegisterInteraction(name string, handler interactionCreateFunc) {
 	s.interactions[name] = handler
+	log.Println("Registered interaction:", name)
 }

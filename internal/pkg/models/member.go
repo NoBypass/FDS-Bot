@@ -9,3 +9,13 @@ type DailyResponse struct {
 	Streak    int     `json:"streak"`
 	WithBonus float64 `json:"with_bonus"`
 }
+
+type DiscordVerifyInput struct {
+	ID   string `json:"id"`
+	Nick string `json:"nick"`
+	Name string `json:"name"`
+}
+
+type DiscordVerifyResponse struct {
+	Actual string `json:"actual"`
+}

@@ -14,6 +14,8 @@ type Api struct {
 	token string
 }
 
+// TODO: good http request error handling
+
 func NewCore() *Api {
 	pwd := os.Getenv("api_pwd")
 	url := os.Getenv("api_url")

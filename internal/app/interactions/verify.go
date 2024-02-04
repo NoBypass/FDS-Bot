@@ -3,6 +3,7 @@ package interactions
 import (
 	"fmt"
 	"github.com/bwmarrin/discordgo"
+	"github.com/nobypass/fds-bot/internal/pkg/consts"
 	"github.com/nobypass/fds-bot/internal/pkg/discord"
 )
 
@@ -10,7 +11,7 @@ func VerifyHandler(i *discord.InteractionCreate) error {
 	return i.Respond(&discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseModal,
 		Data: &discordgo.InteractionResponseData{
-			CustomID: "verify_modal_" + i.Interaction.Member.User.ID,
+			CustomID: "verify_modal_submit",
 			Title:    "Verify " + i.Interaction.Member.User.Username,
 			Components: []discordgo.MessageComponent{
 				discordgo.ActionsRow{
@@ -32,14 +33,26 @@ func VerifyHandler(i *discord.InteractionCreate) error {
 }
 
 func VerifyModalSubmitHandler(i *discord.InteractionCreate) error {
-	if i.Type != discordgo.InteractionModalSubmit {
-		return fmt.Errorf("unexpected interaction type: %v", i.Type)
+	mcName := i.Interaction.ModalSubmitData().Components[0].(*discordgo.ActionsRow).Components[0].(*discordgo.TextInput).Value
+	resp, err := i.Session.Core.Verify(i.Member.User.ID, i.Member.User.Username, mcName)
+	if err != nil {
+		return err
 	}
 
-	// values := i.MessageComponentData().Values
-	// minecraftName := values[0]
+	desc := fmt.Sprintf("This discord account has been linked to `%v` via Hypixel.\n\nInfo: you will soon not be able to see this channel anymore.", resp.Actual)
 
-	// Perform necessary actions with minecraftName
-
-	return nil
+	return i.Respond(&discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Content: i.Member.User.Mention(),
+			Flags:   discordgo.MessageFlagsEphemeral,
+			Embeds: []*discordgo.MessageEmbed{
+				{
+					Title:       "You have been verified!",
+					Description: desc,
+					Color:       consts.EmbedColor,
+				},
+			},
+		},
+	})
 }

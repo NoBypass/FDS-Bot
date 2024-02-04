@@ -23,10 +23,19 @@ func (s *Session) interactionHandler(i *discordgo.InteractionCreate) {
 				panic(err)
 			}
 		}
+	case discordgo.InteractionModalSubmit:
+		if h, ok := s.interactions[i.ModalSubmitData().CustomID]; ok {
+			err := h(s.toInteractionCreate(i))
+			if err != nil {
+				panic(err)
+			}
+		}
 	case discordgo.InteractionMessageComponent:
-		err := s.interactions[i.MessageComponentData().CustomID](s.toInteractionCreate(i))
-		if err != nil {
-			panic(err)
+		if h, ok := s.interactions[i.MessageComponentData().CustomID]; ok {
+			err := h(s.toInteractionCreate(i))
+			if err != nil {
+				panic(err)
+			}
 		}
 	default:
 		log.Printf("Unknown interaction type: %v", i.Type)
@@ -39,7 +48,7 @@ func respondErr(s *Session, i *discordgo.InteractionCreate, err error) {
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Flags:   discordgo.MessageFlagsEphemeral,
-			Content: fmt.Sprintf("Oops, something went wrong: %v\n\nIf this keeps happening, please contact staff.", err),
+			Content: fmt.Sprintf("Oops, something went wrong: `%v`\n\nIf this keeps happening, please contact staff.", err.Error()[19:]),
 		},
 	})
 	if e != nil {

@@ -45,6 +45,12 @@ func adminHandler(i *discord.InteractionCreate) error {
 
 	var res *discordgo.MessageSend
 
+	desc := `Verify your Discord account by linking it to Hypixel.
+
+If it does not work, it might be because you have not linked your Discord account to your Hypixel account. [This video](https://www.youtube.com/watch?v=UresIQdoQHk) will show you how to do it.
+
+**THIS STEP IS REQUIRED TO ACCESS THE SERVER**`
+
 	switch embed {
 	case "verify":
 		res = &discordgo.MessageSend{
@@ -52,7 +58,7 @@ func adminHandler(i *discord.InteractionCreate) error {
 				{
 					Title:       "Verify",
 					Color:       consts.EmbedColor,
-					Description: "Verify your Discord account by linking it to Hypixel.",
+					Description: desc,
 				},
 			},
 			Components: []discordgo.MessageComponent{

@@ -34,11 +34,14 @@ func init() {
 	log.Println("Session created")
 }
 
-const VERSION = "v3.2.1"
+const VERSION = "v3.3.0"
 
 func main() {
 	defer s.Close()
 	defer helpers.Shutdown(s)
+
+	s.RegisterInteraction("verify_modal_submit", interactions.VerifyModalSubmitHandler)
+	s.RegisterInteraction("verify", interactions.VerifyHandler)
 
 	s.RegisterCommand(cmds.Admin)
 	s.RegisterCommand(cmds.Ping)
@@ -47,11 +50,7 @@ func main() {
 	s.RegisterCommand(cmds.VCTeams)
 	s.RegisterCommand(cmds.Play)
 
-	s.RegisterInteraction("verify", interactions.VerifyHandler)
-	s.RegisterInteraction("verify_modal_submit", interactions.VerifyModalSubmitHandler)
-
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, os.Interrupt)
-	log.Println("Press Ctrl+C to exit")
 	<-stop
 }
