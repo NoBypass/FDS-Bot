@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/bwmarrin/discordgo"
 	"github.com/nobypass/fds-bot/internal/pkg/consts"
+	"github.com/nobypass/fds-bot/internal/pkg/discord"
 	"github.com/nobypass/fds-bot/internal/pkg/helpers"
 	"strings"
 )
@@ -16,10 +17,15 @@ const (
 	ChoiceGamemodeOther       = "other"
 )
 
-var Play = &discordgo.ApplicationCommand{
+var Play = &discord.Command{
+	ApplicationCommand: play,
+	Handler:            playHandler,
+}
+
+var play = &discordgo.ApplicationCommand{
 	Name:        "play",
 	Description: "Ask the server to play any gamemode with you",
-	Version:     "v1.0.0",
+	Version:     "v1.0.1",
 	Options: []*discordgo.ApplicationCommandOption{
 		{
 			Name:        "gamemode",
@@ -55,7 +61,7 @@ var Play = &discordgo.ApplicationCommand{
 	},
 }
 
-func PlayHandler(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func playHandler(i *discord.InteractionCreate) error {
 	options := i.ApplicationCommandData().Options
 	gamemode := helpers.Find(options, func(o *discordgo.ApplicationCommandInteractionDataOption) bool {
 		return o.Name == "gamemode"
@@ -64,7 +70,7 @@ func PlayHandler(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 		return o.Name == "description"
 	})
 
-	channels, err := s.GuildChannels(i.GuildID)
+	channels, err := i.Session.GuildChannels(i.GuildID)
 	if err != nil {
 		return err
 	}
@@ -84,7 +90,7 @@ func PlayHandler(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 	case ChoiceGamemodeBedwars:
 		roleName = "Bedwars Player"
 	}
-	roles, err := s.GuildRoles(i.GuildID)
+	roles, err := i.Session.GuildRoles(i.GuildID)
 	if err != nil {
 		return err
 	}
@@ -95,7 +101,7 @@ func PlayHandler(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 		return fmt.Errorf("gamemode role not found")
 	}
 
-	_, err = s.ChannelMessageSendComplex(ltpChannel.ID, &discordgo.MessageSend{
+	_, err = i.Session.ChannelMessageSendComplex(ltpChannel.ID, &discordgo.MessageSend{
 		Content: fmt.Sprintf("By: %s to: %s", i.Member.Mention(), gamemodeRole.Mention()),
 		Embed: &discordgo.MessageEmbed{
 			Title: fmt.Sprintf("%s is looking to play %s", i.Member.Nick, strings.Title(strings.Replace(fmt.Sprint(gamemode.Value), "_", " ", -1))),
@@ -116,7 +122,7 @@ func PlayHandler(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 		return err
 	}
 
-	return s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+	return i.Respond(&discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Content: fmt.Sprintf("Ping was sent to %v", ltpChannel.Mention()),

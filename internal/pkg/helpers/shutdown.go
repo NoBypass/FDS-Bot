@@ -1,11 +1,11 @@
 package helpers
 
 import (
-	"github.com/bwmarrin/discordgo"
+	"github.com/nobypass/fds-bot/internal/pkg/discord"
 	"log"
 )
 
-func Shutdown(s *discordgo.Session) {
+func Shutdown(s *discord.Session) {
 	log.Println("Removing commands...")
 	userID := s.State.User.ID
 

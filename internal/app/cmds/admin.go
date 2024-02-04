@@ -3,15 +3,21 @@ package cmds
 import (
 	"github.com/bwmarrin/discordgo"
 	"github.com/nobypass/fds-bot/internal/pkg/consts"
+	"github.com/nobypass/fds-bot/internal/pkg/discord"
 	"github.com/nobypass/fds-bot/internal/pkg/helpers"
 )
 
 var adminPerms = int64(discordgo.PermissionAdministrator)
 
-var Admin = &discordgo.ApplicationCommand{
+var Admin = &discord.Command{
+	ApplicationCommand: admin,
+	Handler:            adminHandler,
+}
+
+var admin = &discordgo.ApplicationCommand{
 	Name:                     "admin",
 	Description:              "Admin utilities",
-	Version:                  "v1.0.0",
+	Version:                  "v1.0.1",
 	DefaultMemberPermissions: &adminPerms,
 	Options: []*discordgo.ApplicationCommandOption{
 		{
@@ -33,7 +39,7 @@ var Admin = &discordgo.ApplicationCommand{
 	},
 }
 
-func AdminHandler(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func adminHandler(i *discord.InteractionCreate) error {
 	om := helpers.OptionMap(i.ApplicationCommandData().Options)
 	embed := om["embed"].(string)
 
@@ -88,11 +94,11 @@ func AdminHandler(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 		}
 	}
 
-	_, err := s.ChannelMessageSendComplex(i.ChannelID, res)
+	_, err := i.ChannelMessageSendComplex(i.ChannelID, res)
 	if err != nil {
 		return err
 	}
-	return s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+	return i.Respond(&discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Content: "Message was sent to channel",

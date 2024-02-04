@@ -2,38 +2,19 @@ package main
 
 import (
 	"fmt"
-	"github.com/bwmarrin/discordgo"
-	"github.com/nobypass/fds-bot/internal/app/handlers"
+	"github.com/nobypass/fds-bot/internal/app/cmds"
+	"github.com/nobypass/fds-bot/internal/app/interactions"
 	"github.com/nobypass/fds-bot/internal/pkg/consts"
+	"github.com/nobypass/fds-bot/internal/pkg/discord"
 	"github.com/nobypass/fds-bot/internal/pkg/helpers"
 	"log"
 	"os"
 	"os/signal"
 )
 
-var s *discordgo.Session
+var s *discord.Session
 
 func init() {
-	var err error
-	s, err = discordgo.New("Bot " + os.Getenv("token"))
-	if err != nil {
-		log.Fatalf("Invalid bot parameters: %v", err)
-	}
-	log.Println("Session created")
-
-	err = s.Open()
-	if err != nil {
-		log.Fatalf("Cannot open the session: %v", err)
-	}
-	log.Println("Session opened")
-}
-
-const VERSION = "v3.2.0"
-
-func main() {
-	defer s.Close()
-	defer helpers.Shutdown(s)
-
 	fmt.Println(`
    _______  ____   ___       __
   / __/ _ \/ __/  / _ )___  / /_
@@ -42,11 +23,32 @@ func main() {
 The FDS Discord bot written in    ` + consts.WhiteOnCyan.Sprint(" GO ") + `
 ________________________________________________
 `)
+}
 
-	handlers.RegisterCommands(s)
+func init() {
+	var err error
+	s, err = discord.Connect(os.Getenv("token"))
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
+	log.Println("Session created")
+}
 
-	s.AddHandler(handlers.Ready)
-	s.AddHandler(handlers.Interactions)
+const VERSION = "v3.2.1"
+
+func main() {
+	defer s.Close()
+	defer helpers.Shutdown(s)
+
+	s.RegisterCommand(cmds.Admin)
+	s.RegisterCommand(cmds.Ping)
+	s.RegisterCommand(cmds.Daily)
+	s.RegisterCommand(cmds.Admin)
+	s.RegisterCommand(cmds.VCTeams)
+	s.RegisterCommand(cmds.Play)
+
+	s.RegisterInteraction("verify", interactions.VerifyHandler)
+	s.RegisterInteraction("verify_modal_submit", interactions.VerifyModalSubmitHandler)
 
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, os.Interrupt)

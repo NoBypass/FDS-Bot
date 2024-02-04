@@ -3,15 +3,21 @@ package cmds
 import (
 	"fmt"
 	"github.com/bwmarrin/discordgo"
+	"github.com/nobypass/fds-bot/internal/pkg/discord"
 	"github.com/nobypass/fds-bot/internal/pkg/helpers"
 	"math/rand"
 	"strings"
 )
 
-var Teams = &discordgo.ApplicationCommand{
+var Teams = &discord.Command{
+	ApplicationCommand: teams,
+	Handler:            teamsHandler,
+}
+
+var teams = &discordgo.ApplicationCommand{
 	Name:        "teams",
 	Description: "Generate random teams",
-	Version:     "v1.0.1",
+	Version:     "v1.0.2",
 	Options: []*discordgo.ApplicationCommandOption{
 		{
 			Name:        "players",
@@ -36,7 +42,7 @@ var Teams = &discordgo.ApplicationCommand{
 	},
 }
 
-func TeamsHandler(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func teamsHandler(i *discord.InteractionCreate) error {
 	om := helpers.OptionMap(i.ApplicationCommandData().Options)
 	playersStr := om["players"].(string)
 	teamAmount, tOk := om["teams"].(float64)
@@ -64,5 +70,5 @@ func TeamsHandler(s *discordgo.Session, i *discordgo.InteractionCreate) error {
 		teams[i%len(teams)] = append(teams[i%len(teams)], player)
 	}
 
-	return teamsPrinter(s, i, teams)
+	return teamsPrinter(i, teams)
 }

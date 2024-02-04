@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 )
@@ -13,9 +14,7 @@ type Api struct {
 	token string
 }
 
-var Core *Api
-
-func init() {
+func NewCore() *Api {
 	pwd := os.Getenv("api_pwd")
 	url := os.Getenv("api_url")
 
@@ -25,7 +24,7 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	res, err := http.Post(url+"/discord/bot-login"+pwd, "application/json", bytes.NewBuffer(body))
+	res, err := http.Post(url+"/discord/bot-login", "application/json", bytes.NewBuffer(body))
 	if err != nil {
 		panic(err)
 	}
@@ -44,7 +43,8 @@ func init() {
 		panic(err)
 	}
 
-	Core = &Api{
+	log.Println("Logged in to API Core successfully")
+	return &Api{
 		url:   url,
 		token: result.Token,
 	}

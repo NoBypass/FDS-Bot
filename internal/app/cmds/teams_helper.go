@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"github.com/bwmarrin/discordgo"
 	"github.com/nobypass/fds-bot/internal/pkg/consts"
+	"github.com/nobypass/fds-bot/internal/pkg/discord"
 )
 
 var two = 2.0
 
-var teamsPrinter = func(s *discordgo.Session, i *discordgo.InteractionCreate, teams [][]string) error {
-	return s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+var teamsPrinter = func(i *discord.InteractionCreate, teams [][]string) error {
+	return i.Respond(&discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Embeds: []*discordgo.MessageEmbed{

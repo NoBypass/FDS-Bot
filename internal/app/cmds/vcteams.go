@@ -3,11 +3,17 @@ package cmds
 import (
 	"fmt"
 	"github.com/bwmarrin/discordgo"
+	"github.com/nobypass/fds-bot/internal/pkg/discord"
 	"github.com/nobypass/fds-bot/internal/pkg/helpers"
 	"math/rand"
 )
 
-var VCTeams = &discordgo.ApplicationCommand{
+var VCTeams = &discord.Command{
+	ApplicationCommand: vcTeams,
+	Handler:            vcTeamsHandler,
+}
+
+var vcTeams = &discordgo.ApplicationCommand{
 	Name:        "vcteams",
 	Description: "Generate random teams from the members in your voice channel",
 	Version:     "v1.0.0",
@@ -29,7 +35,7 @@ var VCTeams = &discordgo.ApplicationCommand{
 	},
 }
 
-func VCTeamsHandler(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func vcTeamsHandler(i *discord.InteractionCreate) error {
 	om := helpers.OptionMap(i.ApplicationCommandData().Options)
 	teamAmount, tOk := om["teams"].(float64)
 	memberAmount, mOk := om["members"].(float64)
@@ -42,12 +48,12 @@ func VCTeamsHandler(s *discordgo.Session, i *discordgo.InteractionCreate) error 
 
 	userID := i.Member.User.ID
 	guildID := i.GuildID
-	voiceState, err := s.State.VoiceState(guildID, userID)
+	voiceState, err := i.Session.State.VoiceState(guildID, userID)
 	if err != nil {
 		return err
 	}
 	voiceChannelID := voiceState.ChannelID
-	guild, err := s.State.Guild(guildID)
+	guild, err := i.Session.State.Guild(guildID)
 	if err != nil {
 		return err
 	}
@@ -55,7 +61,7 @@ func VCTeamsHandler(s *discordgo.Session, i *discordgo.InteractionCreate) error 
 	var members []string
 	for _, vs := range guild.VoiceStates {
 		if vs.ChannelID == voiceChannelID {
-			member, err := s.GuildMember(guildID, vs.UserID)
+			member, err := i.Session.GuildMember(guildID, vs.UserID)
 			if err != nil {
 				return err
 			}
@@ -77,5 +83,5 @@ func VCTeamsHandler(s *discordgo.Session, i *discordgo.InteractionCreate) error 
 		teams[i%len(teams)] = append(teams[i%len(teams)], player)
 	}
 
-	return teamsPrinter(s, i, teams)
+	return teamsPrinter(i, teams)
 }
