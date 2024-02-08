@@ -40,6 +40,20 @@ func VerifyModalSubmitHandler(i *discord.InteractionCreate) error {
 	}
 
 	desc := fmt.Sprintf("This discord account has been linked to `%v` via Hypixel.\n\nInfo: you will soon not be able to see this channel anymore.", resp.Actual)
+	err = i.Session.GuildMemberRoleAdd(i.GuildID, i.Member.User.ID, consts.RoleMember)
+	if err != nil {
+		return err
+	}
+
+	err = i.Session.GuildMemberRoleRemove(i.GuildID, i.Member.User.ID, consts.RoleGuest)
+	if err != nil {
+		return err
+	}
+
+	err = i.Session.GuildMemberNickname(i.GuildID, i.Member.User.ID, resp.Actual)
+	if err != nil {
+		return err
+	}
 
 	return i.Respond(&discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
