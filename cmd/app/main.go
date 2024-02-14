@@ -2,53 +2,41 @@ package main
 
 import (
 	"fmt"
-	"github.com/nobypass/fds-bot/internal/app/cmds"
-	"github.com/nobypass/fds-bot/internal/app/interactions"
-	"github.com/nobypass/fds-bot/internal/pkg/consts"
-	"github.com/nobypass/fds-bot/internal/pkg/discord"
-	"github.com/nobypass/fds-bot/internal/pkg/helpers"
+	"github.com/fatih/color"
+	"github.com/nobypass/fds-bot/internal/bot/commands"
+	"github.com/nobypass/fds-bot/internal/bot/core"
+	"github.com/nobypass/fds-bot/internal/bot/events"
 	"log"
 	"os"
 	"os/signal"
 )
-
-var s *discord.Session
 
 func init() {
 	fmt.Println(`
    _______  ____   ___       __
   / __/ _ \/ __/  / _ )___  / /_
  / _// // /\ \   / _  / _ \/ __/
-/_/ /____/___/  /____/\___/\__/   ` + consts.Purple.Sprint(VERSION) + `
-The FDS Discord bot written in    ` + consts.WhiteOnCyan.Sprint(" GO ") + `
+/_/ /____/___/  /____/\___/\__/   ` + color.New(color.FgMagenta).Sprint(VERSION) + `
+The FDS Discord bot written in    ` + color.New(color.BgHiCyan).Add(color.FgHiWhite).Sprint(" GO ") + `
 ________________________________________________
 `)
 }
 
-func init() {
-	var err error
-	s, err = discord.Connect(os.Getenv("token"))
-	if err != nil {
-		log.Fatalf(err.Error())
-	}
-	log.Println("Session created")
-}
-
-const VERSION = "v3.3.0"
+const VERSION = "v3.4.0"
 
 func main() {
-	defer s.Close()
-	defer helpers.Shutdown(s)
+	session := core.NewSession()
+	logger := log.New(os.Stdout, "fds-bot: ", log.Ldate|log.Ltime|log.LstdFlags)
+	event := events.New(logger)
+	defer session.Close()
 
-	s.RegisterInteraction("verify_modal_submit", interactions.VerifyModalSubmitHandler)
-	s.RegisterInteraction("verify", interactions.VerifyHandler)
+	err := commands.RegisterAll(session)
+	if err != nil {
+		logger.Println(err)
+		return
+	}
 
-	s.RegisterCommand(cmds.Admin)
-	s.RegisterCommand(cmds.Ping)
-	s.RegisterCommand(cmds.Daily)
-	s.RegisterCommand(cmds.Admin)
-	s.RegisterCommand(cmds.VCTeams)
-	s.RegisterCommand(cmds.Play)
+	session.AddHandler(event.OnInteraction)
 
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, os.Interrupt)

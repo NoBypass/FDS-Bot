@@ -1,16 +1,31 @@
 # FDS Discord Bot
 
 ## ToDo
-- [ ] Update play embed with VC activity of the user who sent it
-- [ ] Add leveling through VC activity
-- [ ] Add leveling through chat activity
-- [ ] Add daily rewards
-- [ ] Add way to set preferences (change ping roles, etc.)
-- [ ] Add level leaderboard
-- [ ] Add profile command
+### Commands
+- [ ] /play
+- [ ] /profile
+- [ ] /leaderboard
+- [ ] /daily
+- [ ] /ping
+- [ ] /help
+
+### Other
+- [ ] Linking to FDS Core
+- [ ] Core handler
+- [ ] Core WebSocket handler
+- [ ] Leveling through VC activity
+- [ ] Leveling through chat activity
+- [ ] Multi server support
+- [ ] Multi language support
+- [ ] Guild specific settings
+- [ ] User specific settings
+- [ ] Blacklist
+- [ ] Logger
+- [ ] Tracer
+- [ ] Veteran role
+- [ ] Use caching
 
 ## Environment Variables
-- `token` - Discord bot token
-- `pwd` - Password to log into the FDS Core
-- `api_url` - URL to the FDS Core API
-- `api_pwd` - Password to the FDS Core API
+- `URL` - URL to the FDS Core API
+- `TOKEN` - Discord bot token
+- `PASSWORD` - Password to log into the FDS Core
