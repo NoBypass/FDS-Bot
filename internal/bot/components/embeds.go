@@ -2,11 +2,20 @@ package components
 
 import (
 	"fmt"
+	"github.com/NoBypass/fds/pkg/api"
 	"github.com/bwmarrin/discordgo"
 	"github.com/nobypass/fds-bot/internal/pkg/version"
 )
 
 var (
+	EmbedVerificationDone = func(resp api.DiscordVerifyResponse) *discordgo.MessageEmbed {
+		return &discordgo.MessageEmbed{
+			Title:       "You are verified!",
+			Color:       0x2B2D31,
+			Description: fmt.Sprintf("This discord account has been linked to `%v` via Hypixel.\n\nInfo: you will soon not be able to see this channel anymore.", resp.Actual),
+		}
+	}
+
 	EmbedTeams = func(teams [][]string) *discordgo.MessageEmbed {
 		return &discordgo.MessageEmbed{
 			Title: "Teams",

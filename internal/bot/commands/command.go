@@ -16,28 +16,20 @@ type CommandManager struct {
 	logger *log.Logger
 }
 
-func NewCommandManager(logger *log.Logger) *CommandManager {
+func NewManager(logger *log.Logger) *CommandManager {
 	return &CommandManager{
 		m:      make(map[string]Command),
 		logger: logger,
 	}
 }
 
-func (cm *CommandManager) Run(name string, s *discordgo.Session, i *discordgo.InteractionCreate) error {
+func (cm *CommandManager) Run(s *discordgo.Session, i *discordgo.InteractionCreate) error {
+	name := i.ApplicationCommandData().Name
 	c, ok := cm.m[name]
 	if !ok {
 		return fmt.Errorf("command not found: %s", name)
 	}
 	return c.Run(s, i)
-}
-
-func (cm *CommandManager) Register(s *discordgo.Session, c Command) error {
-	_, err := s.ApplicationCommandCreate(s.State.User.ID, "", c.Content())
-	if err != nil {
-		return err
-	}
-	cm.m[c.Content().Name] = c
-	return nil
 }
 
 func (cm *CommandManager) RegisterAll(s *discordgo.Session) error {
@@ -50,12 +42,16 @@ func (cm *CommandManager) RegisterAll(s *discordgo.Session) error {
 		&VCTeams{},
 	}
 
-	for _, c := range commands {
-		err := cm.Register(s, c)
+	for i, c := range commands {
+		_, err := s.ApplicationCommandCreate(s.State.User.ID, "", c.Content())
 		if err != nil {
 			return err
 		}
-		cm.logger.Printf("Registered command: %s", c.Content().Name)
+		cm.m[c.Content().Name] = c
+		if err != nil {
+			return err
+		}
+		cm.logger.Printf("Registered command: %s (%d/%d)", c.Content().Name, i+1, len(commands))
 	}
 
 	return nil

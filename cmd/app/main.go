@@ -6,6 +6,8 @@ import (
 	"github.com/nobypass/fds-bot/internal/bot/commands"
 	"github.com/nobypass/fds-bot/internal/bot/core"
 	"github.com/nobypass/fds-bot/internal/bot/events"
+	"github.com/nobypass/fds-bot/internal/bot/message_components"
+	"github.com/nobypass/fds-bot/internal/bot/modals"
 	"github.com/nobypass/fds-bot/internal/pkg/version"
 	"log"
 	"os"
@@ -26,17 +28,20 @@ ________________________________________________
 func main() {
 	session := core.NewSession()
 	logger := log.New(os.Stdout, "fds-bot: ", log.Ldate|log.Ltime|log.LstdFlags)
-	event := events.New(logger)
-	cmdManager := commands.NewCommandManager(logger)
-	defer session.Close()
-
+	cmdManager := commands.NewManager(logger)
+	componentManager := message_components.NewManager(logger)
+	modalManager := modals.NewManager(logger, os.Getenv("API_URL"))
+	componentManager.RegisterAll()
+	modalManager.RegisterAll()
 	err := cmdManager.RegisterAll(session)
 	if err != nil {
-		logger.Println(err)
-		return
+		logger.Fatal(err)
 	}
 
-	session.AddHandler(event.OnInteraction(cmdManager))
+	event := events.New(logger, cmdManager, componentManager, modalManager)
+	defer session.Close()
+
+	session.AddHandler(event.OnInteraction)
 
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, os.Interrupt)

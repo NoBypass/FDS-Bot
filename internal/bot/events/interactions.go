@@ -1,35 +1,40 @@
 package events
 
 import (
-	"context"
 	"github.com/bwmarrin/discordgo"
-	"github.com/nobypass/fds-bot/internal/bot/commands"
 )
 
-func (e *Event) OnInteraction(cm *commands.CommandManager) func(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	e.Context = context.WithValue(e.Context, "commandManager", cm)
-	return e.interactionHandler
-}
-
-func (e *Event) interactionHandler(s *discordgo.Session, i *discordgo.InteractionCreate) {
+func (e *Event) OnInteraction(s *discordgo.Session, i *discordgo.InteractionCreate) {
 	switch i.Type {
 	case discordgo.InteractionApplicationCommand:
-		err := e.Context.Value("commandManager").(*commands.CommandManager).Run(i.ApplicationCommandData().Name, s, i)
+		err := e.commandManager.Run(s, i)
 		if err != nil {
-			fallbackErr := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
-				Type: discordgo.InteractionResponseChannelMessageWithSource,
-				Data: &discordgo.InteractionResponseData{
-					Content: err.Error(),
-					Flags:   discordgo.MessageFlagsEphemeral,
-				},
-			})
-			if fallbackErr != nil {
-				e.logger.Printf("Failed to respond to command: %s", err)
-			}
+			e.fallback(s, i, err)
 		}
 	case discordgo.InteractionMessageComponent:
+		err := e.messageComponentManager.Run(s, i)
+		if err != nil {
+			e.fallback(s, i, err)
+		}
 	case discordgo.InteractionModalSubmit:
+		err := e.modalManager.Run(s, i)
+		if err != nil {
+			e.fallback(s, i, err)
+		}
 	default:
 		e.logger.Println("Unknown interaction type")
+	}
+}
+
+func (e *Event) fallback(s *discordgo.Session, i *discordgo.InteractionCreate, err error) {
+	fallbackErr := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Content: err.Error(),
+			Flags:   discordgo.MessageFlagsEphemeral,
+		},
+	})
+	if fallbackErr != nil {
+		e.logger.Printf("Failed to respond to command: %s", err)
 	}
 }
