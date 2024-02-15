@@ -2,7 +2,7 @@
 
 ## ToDo
 ### Commands
-- [ ] /play
+- [x] /play
 - [ ] /profile
 - [ ] /leaderboard
 - [ ] /daily

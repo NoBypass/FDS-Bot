@@ -7,6 +7,28 @@ import (
 )
 
 var (
+	EmbedTeams = func(teams [][]string) *discordgo.MessageEmbed {
+		return &discordgo.MessageEmbed{
+			Title: "Teams",
+			Color: 0x2B2D31,
+			Fields: func() []*discordgo.MessageEmbedField {
+				var fields []*discordgo.MessageEmbedField
+				for i, team := range teams {
+					var val string
+					for _, player := range team {
+						val += fmt.Sprintf("` %v `\n", player)
+					}
+					fields = append(fields, &discordgo.MessageEmbedField{
+						Inline: true,
+						Name:   fmt.Sprintf("Team %v", i+1),
+						Value:  val,
+					})
+				}
+				return fields
+			}(),
+		}
+	}
+
 	EmbedPlay = func(member *discordgo.Member, to *discordgo.Role, desc *discordgo.ApplicationCommandInteractionDataOption, mode string) *discordgo.MessageEmbed {
 		return &discordgo.MessageEmbed{
 			Title: fmt.Sprintf("%s is looking to play %s", member.User.Username, mode),
@@ -23,6 +45,7 @@ var (
 			},
 		}
 	}
+
 	EmbedVerify = &discordgo.MessageEmbed{
 		Title: "Verify",
 		Color: 0x2B2D31,
@@ -32,6 +55,7 @@ If it does not work, it might be because you have not linked your Discord accoun
 
 **THIS STEP IS REQUIRED TO ACCESS THE SERVER**`,
 	}
+
 	EmbedHelp = func(s *discordgo.Session, cmds map[string]*discordgo.ApplicationCommand) *discordgo.MessageEmbed {
 		return &discordgo.MessageEmbed{
 			Title:       fmt.Sprintf("FDS Bot %s", version.VERSION),
