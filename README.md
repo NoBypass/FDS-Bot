@@ -6,8 +6,11 @@
 - [ ] /profile
 - [ ] /leaderboard
 - [ ] /daily
-- [ ] /ping
-- [ ] /help
+- [x] /ping
+- [x] /help
+- [ ] /teams
+- [ ] /vcteams
+- [ ] give xp
 
 ### Other
 - [ ] Linking to FDS Core

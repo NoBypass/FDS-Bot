@@ -7,6 +7,22 @@ import (
 )
 
 var (
+	EmbedPlay = func(member *discordgo.Member, to *discordgo.Role, desc *discordgo.ApplicationCommandInteractionDataOption, mode string) *discordgo.MessageEmbed {
+		return &discordgo.MessageEmbed{
+			Title: fmt.Sprintf("%s is looking to play %s", member.User.Username, mode),
+			Description: func() string {
+				if desc != nil {
+					return fmt.Sprintf("**Description**\n%v", desc.Value)
+				}
+				return ""
+			}(),
+			Color: 0x2B2D31,
+			Author: &discordgo.MessageEmbedAuthor{
+				Name:    member.User.Username,
+				IconURL: member.User.AvatarURL("64"),
+			},
+		}
+	}
 	EmbedVerify = &discordgo.MessageEmbed{
 		Title: "Verify",
 		Color: 0x2B2D31,

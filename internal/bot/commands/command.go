@@ -45,6 +45,7 @@ func (cm *CommandManager) RegisterAll(s *discordgo.Session) error {
 		&Ping{},
 		&Help{cm.m},
 		&Admin{},
+		&Play{},
 	}
 
 	for _, c := range commands {
