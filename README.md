@@ -8,8 +8,8 @@
 - [ ] /daily
 - [x] /ping
 - [x] /help
-- [ ] /teams
-- [ ] /vcteams
+- [x] /teams
+- [x] /vcteams
 - [ ] give xp
 
 ### Other
