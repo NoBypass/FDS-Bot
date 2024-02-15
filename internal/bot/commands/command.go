@@ -47,6 +47,7 @@ func (cm *CommandManager) RegisterAll(s *discordgo.Session) error {
 		&Admin{},
 		&Play{},
 		&Teams{},
+		&VCTeams{},
 	}
 
 	for _, c := range commands {
