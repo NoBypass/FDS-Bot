@@ -4,7 +4,6 @@ import (
 	"github.com/NoBypass/fds/pkg/api"
 	"github.com/bwmarrin/discordgo"
 	"log"
-	"os"
 )
 
 type Modal interface {
@@ -18,13 +17,7 @@ type ModalManager struct {
 	api    *api.Client
 }
 
-func NewManager(logger *log.Logger, apiURL string) *ModalManager {
-	apiClient := api.NewFDSClient(apiURL)
-	resp, err := apiClient.BotLogin(&api.DiscordBotLoginRequest{Pwd: os.Getenv("PASSWORD")})
-	if err != nil {
-		logger.Fatalf("failed to login to bot: %v", err)
-	}
-	apiClient.SetToken(resp.Token)
+func NewManager(logger *log.Logger, apiClient *api.Client) *ModalManager {
 	return &ModalManager{
 		api:    apiClient,
 		mMap:   make(map[string]Modal),

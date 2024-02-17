@@ -8,6 +8,14 @@ import (
 )
 
 var (
+	EmbedProfile = func(member *api.DiscordMemberResponse) *discordgo.MessageEmbed {
+		return &discordgo.MessageEmbed{
+			Title: fmt.Sprintf("Profile of %s", member.Nick),
+			Color: 0x2B2D31,
+			// TODO: Add additional information
+		}
+	}
+
 	EmbedVerificationDone = func(resp api.DiscordVerifyResponse) *discordgo.MessageEmbed {
 		return &discordgo.MessageEmbed{
 			Title:       "You are verified!",

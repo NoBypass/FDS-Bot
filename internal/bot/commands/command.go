@@ -2,6 +2,7 @@ package commands
 
 import (
 	"fmt"
+	"github.com/NoBypass/fds/pkg/api"
 	"github.com/bwmarrin/discordgo"
 	"log"
 )
@@ -13,11 +14,13 @@ type Command interface {
 
 type CommandManager struct {
 	m      map[string]Command
+	api    *api.Client
 	logger *log.Logger
 }
 
-func NewManager(logger *log.Logger) *CommandManager {
+func NewManager(logger *log.Logger, apiClient *api.Client) *CommandManager {
 	return &CommandManager{
+		api:    apiClient,
 		m:      make(map[string]Command),
 		logger: logger,
 	}
@@ -39,6 +42,7 @@ func (cm *CommandManager) RegisterAll(s *discordgo.Session) error {
 		&Admin{},
 		&Play{},
 		&Teams{},
+		&Profile{cm.api},
 		&VCTeams{},
 	}
 
