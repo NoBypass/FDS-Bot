@@ -4,15 +4,49 @@ import (
 	"fmt"
 	"github.com/NoBypass/fds/pkg/api"
 	"github.com/bwmarrin/discordgo"
+	"github.com/nobypass/fds-bot/internal/pkg/utils"
 	"github.com/nobypass/fds-bot/internal/pkg/version"
+	"time"
 )
 
 var (
-	EmbedProfile = func(member *api.DiscordMemberResponse) *discordgo.MessageEmbed {
+	EmbedLeaderboard = func(s *discordgo.Session, lb *api.DiscordLeaderboardResponse, page int) *discordgo.MessageEmbed {
 		return &discordgo.MessageEmbed{
-			Title: fmt.Sprintf("Profile of %s", member.Nick),
+			Title: fmt.Sprintf("Leaderboard (Page %v)", page+1),
 			Color: 0x2B2D31,
-			// TODO: Add additional information
+			Description: func() (final string) {
+				for i, player := range *lb {
+					user, err := s.User(player.DiscordID)
+					if err != nil {
+						user = &discordgo.User{ID: "Unknown"}
+					}
+					final += fmt.Sprintf("%d. %s - Level: %d | XP: %f\n", i+1, user.Mention(), player.Level, player.XP)
+				}
+				return
+			}(),
+		}
+	}
+
+	EmbedProfile = func(dcMember *discordgo.Member, member *api.DiscordMemberResponse, url string) *discordgo.MessageEmbed {
+		return &discordgo.MessageEmbed{
+			Title: fmt.Sprintf("Profile of %s", utils.Username(dcMember)),
+			Color: 0x2B2D31,
+			Fields: func() []*discordgo.MessageEmbedField {
+				dailyAt := utils.StrToTime(member.LastDailyAt)
+				return []*discordgo.MessageEmbedField{
+					{
+						Name:  "Last daily was claimed at",
+						Value: fmt.Sprintf("`%s`\n(`%s` ago)", dailyAt.Format("2006-01-02 15:04:05"), utils.StrAgo(dailyAt)),
+					},
+					{
+						Name:  "Streak",
+						Value: fmt.Sprintf("Current Streak `%d`\nStarted at `%s`\n Best Streak `TODO`", member.Streak, time.Now().Add(-time.Duration(member.Streak)*24*time.Hour).Format("2006-01-02")),
+					},
+				}
+			}(),
+			Image: &discordgo.MessageEmbedImage{
+				URL: url,
+			},
 		}
 	}
 

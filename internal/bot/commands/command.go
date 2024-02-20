@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"github.com/NoBypass/fds/pkg/api"
 	"github.com/bwmarrin/discordgo"
+	"golang.org/x/image/font"
+	"golang.org/x/image/font/opentype"
+	"io/ioutil"
 	"log"
 )
 
@@ -36,14 +39,32 @@ func (cm *CommandManager) Run(s *discordgo.Session, i *discordgo.InteractionCrea
 }
 
 func (cm *CommandManager) RegisterAll(s *discordgo.Session) error {
+	fontBytes, err := ioutil.ReadFile("assets/font/Inter-Bold.ttf")
+	if err != nil {
+		return err
+	}
+	fontParsed, err := opentype.Parse(fontBytes)
+	if err != nil {
+		return err
+	}
+	face, err := opentype.NewFace(fontParsed, &opentype.FaceOptions{
+		Size:    14,
+		DPI:     72,
+		Hinting: font.HintingFull,
+	})
+	if err != nil {
+		return err
+	}
+
 	commands := []Command{
 		&Ping{},
-		&Help{cm.m},
-		&Admin{},
 		&Play{},
 		&Teams{},
-		&Profile{cm.api},
+		&Admin{},
 		&VCTeams{},
+		&Help{cm.m},
+		&Leaderboard{cm.api},
+		&Profile{cm.api, face},
 	}
 
 	for i, c := range commands {
