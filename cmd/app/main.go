@@ -5,6 +5,7 @@ import (
 	"github.com/nobypass/fds-bot/internal/bot/event"
 	"github.com/nobypass/fds-bot/internal/bot/interaction"
 	"github.com/nobypass/fds-bot/internal/bot/session"
+	"github.com/nobypass/fds-bot/internal/monitoring"
 	"github.com/nobypass/fds-bot/internal/pkg/version"
 	"os"
 	"os/signal"
@@ -24,7 +25,9 @@ ________________________________________________
 func main() {
 	s := session.ConnectToDiscord()
 	fds := session.ConnectToFDS()
-	em := event.NewManager(s)
+	tracer, closer := monitoring.CreateTracer()
+	em := event.NewManager(s, tracer)
+	defer closer.Close()
 	defer s.Close()
 
 	cmds := interaction.AllCommands(fds)
