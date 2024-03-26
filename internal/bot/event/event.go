@@ -6,8 +6,8 @@ import (
 )
 
 type Event interface {
-	Exec(*discordgo.Session, *discordgo.InteractionCreate) error
-	Register(*discordgo.Session)
+	Exec(*discordgo.Session, *discordgo.InteractionCreate, opentracing.Span) error
+	Content() any
 	Name() string
 }
 
@@ -28,7 +28,14 @@ func NewManager(s *discordgo.Session, tracer opentracing.Tracer) *Manager {
 func (m *Manager) Add(e ...Event) {
 	for _, ev := range e {
 		m.Events[ev.Name()] = ev
-		ev.Register(m.s)
+		content := ev.Content()
+		switch content.(type) {
+		case *discordgo.ApplicationCommand:
+			_, err := m.s.ApplicationCommandCreate(m.s.State.User.ID, "", content.(*discordgo.ApplicationCommand))
+			if err != nil {
+				panic(err)
+			}
+		}
 		println("Registered event: " + ev.Name())
 	}
 }
