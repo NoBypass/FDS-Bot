@@ -21,8 +21,6 @@ type (
 	buttonVerify btn
 )
 
-func (b *buttonVerify) Register(*discordgo.Session) {}
-
 func (b *buttonVerify) Content() any {
 	return &discordgo.Button{
 		CustomID: "verify",
@@ -37,8 +35,4 @@ func (b *buttonVerify) Content() any {
 func (b *buttonVerify) Exec(s *discordgo.Session, i *discordgo.InteractionCreate, _ opentracing.Span) error {
 	return s.InteractionRespond(i.Interaction,
 		(&modalVerify{b.fds, i.Member.User}).Content().(*discordgo.InteractionResponse))
-}
-
-func (b *buttonVerify) Name() string {
-	return "btn_verify"
 }

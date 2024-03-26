@@ -78,7 +78,3 @@ func (m *modalVerify) Exec(s *discordgo.Session, i *discordgo.InteractionCreate,
 		},
 	})
 }
-
-func (m *modalVerify) Name() string {
-	return "modal_verify"
-}

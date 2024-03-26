@@ -24,15 +24,19 @@ ________________________________________________
 
 func main() {
 	s := session.ConnectToDiscord()
-	fds := session.ConnectToFDS()
 	tracer, closer := monitoring.CreateTracer()
+	fds := session.ConnectToFDS(tracer)
 	em := event.NewManager(s, tracer)
 	defer closer.Close()
 	defer s.Close()
 
 	cmds := interaction.AllCommands(fds)
+	modals := interaction.AllModals(fds)
+	btns := interaction.AllButtons(fds)
 
+	em.Add(btns...)
 	em.Add(cmds...)
+	em.Add(modals...)
 
 	s.AddHandler(em.Handle)
 

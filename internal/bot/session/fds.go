@@ -13,12 +13,14 @@ type FDSConnection struct {
 	token string
 }
 
-func ConnectToFDS() *FDSConnection {
+func ConnectToFDS(tracer opentracing.Tracer) *FDSConnection {
 	conn := &FDSConnection{
 		url: os.Getenv("API_URL"),
 	}
 
-	resp, err := conn.Login(os.Getenv("PASSWORD"))
+	sp := tracer.StartSpan("Logging bot in")
+	defer sp.Finish()
+	resp, err := conn.Login(sp, os.Getenv("PASSWORD"))
 	if err != nil {
 		return nil
 	}

@@ -37,10 +37,6 @@ type (
 	vcteams cmd
 )
 
-func (t *vcteams) Name() string {
-	return "vcteams"
-}
-
 func (t *vcteams) Content() any {
 	return &discordgo.ApplicationCommand{
 		Name:        "vcteams",
@@ -128,10 +124,6 @@ func (t *vcteams) Exec(s *discordgo.Session, i *discordgo.InteractionCreate, _ o
 			},
 		},
 	})
-}
-
-func (t *teams) Name() string {
-	return "teams"
 }
 
 var two = 2.0
@@ -238,10 +230,6 @@ func (p *profile) Exec(s *discordgo.Session, i *discordgo.InteractionCreate, sp 
 	})
 }
 
-func (p *profile) Name() string {
-	return "profile"
-}
-
 func (p *profile) Content() any {
 	return &discordgo.ApplicationCommand{
 		Name:        "profile",
@@ -256,10 +244,6 @@ func (p *profile) Content() any {
 			},
 		},
 	}
-}
-
-func (p *play) Name() string {
-	return "play"
 }
 
 func (p *play) Content() any {
@@ -446,10 +430,6 @@ func (a *admin) Content() any {
 	}
 }
 
-func (a *admin) Name() string {
-	return "admin"
-}
-
 func (h *help) Exec(s *discordgo.Session, i *discordgo.InteractionCreate, _ opentracing.Span) error {
 	return s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
@@ -459,7 +439,8 @@ func (h *help) Exec(s *discordgo.Session, i *discordgo.InteractionCreate, _ open
 				(&embedHelp{s, func() map[string]*discordgo.ApplicationCommand {
 					m := make(map[string]*discordgo.ApplicationCommand)
 					for _, cmd := range AllCommands(h.fds) {
-						m[cmd.Name()] = cmd.Content().(*discordgo.ApplicationCommand)
+						content := cmd.Content().(*discordgo.ApplicationCommand)
+						m[content.Name] = content
 					}
 					return m
 				}()}).Content().(*discordgo.MessageEmbed),
@@ -474,10 +455,6 @@ func (h *help) Content() any {
 		Description: "Get help",
 		Version:     "v1.0.0",
 	}
-}
-
-func (h *help) Name() string {
-	return "help"
 }
 
 func (p *ping) Exec(s *discordgo.Session, i *discordgo.InteractionCreate, _ opentracing.Span) error {
@@ -496,8 +473,4 @@ func (p *ping) Content() any {
 		Description: "Ping the bot",
 		Version:     "v1.2.0",
 	}
-}
-
-func (p *ping) Name() string {
-	return "ping"
 }

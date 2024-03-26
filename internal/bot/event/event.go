@@ -2,13 +2,13 @@ package event
 
 import (
 	"github.com/bwmarrin/discordgo"
+	"github.com/nobypass/fds-bot/internal/pkg/utils"
 	"github.com/opentracing/opentracing-go"
 )
 
 type Event interface {
 	Exec(*discordgo.Session, *discordgo.InteractionCreate, opentracing.Span) error
 	Content() any
-	Name() string
 }
 
 type Manager struct {
@@ -27,8 +27,9 @@ func NewManager(s *discordgo.Session, tracer opentracing.Tracer) *Manager {
 
 func (m *Manager) Add(e ...Event) {
 	for _, ev := range e {
-		m.Events[ev.Name()] = ev
 		content := ev.Content()
+		name := utils.ComponentName(content)
+		m.Events[name] = ev
 		switch content.(type) {
 		case *discordgo.ApplicationCommand:
 			_, err := m.s.ApplicationCommandCreate(m.s.State.User.ID, "", content.(*discordgo.ApplicationCommand))
@@ -36,6 +37,6 @@ func (m *Manager) Add(e ...Event) {
 				panic(err)
 			}
 		}
-		println("Registered event: " + ev.Name())
+		println("Registered event: " + name)
 	}
 }
