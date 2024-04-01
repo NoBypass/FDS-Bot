@@ -3,6 +3,8 @@ package session
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
+	"github.com/nobypass/fds-bot/internal/bot/models"
 	"github.com/opentracing/opentracing-go"
 	"net/http"
 	"os"
@@ -22,14 +24,15 @@ func ConnectToFDS(tracer opentracing.Tracer) *FDSConnection {
 	defer sp.Finish()
 	resp, err := conn.Login(sp, os.Getenv("PASSWORD"))
 	if err != nil {
-		return nil
+		panic(err)
 	}
+	println("Connected to FDS successfully")
 
 	conn.token = resp.Token
 	return conn
 }
 
-func (c *FDSConnection) newRequest(method, path string, body interface{}, sp opentracing.Span) (*http.Request, error) {
+func (c *FDSConnection) newRequest(method, path string, body any, sp opentracing.Span) (*http.Request, error) {
 	var data []byte
 	if body != nil {
 		d, err := json.Marshal(body)
@@ -68,7 +71,12 @@ func do[T any](req *http.Request) (*T, error) {
 	defer res.Body.Close()
 
 	if res.StatusCode < 200 || res.StatusCode >= 300 {
-		return nil, err
+		e := new(models.ErrorResponse)
+		err = json.NewDecoder(res.Body).Decode(e)
+		if err != nil {
+			return nil, err
+		}
+		return nil, fmt.Errorf("(%d) %s", res.StatusCode, e.Message)
 	}
 
 	v := new(T)

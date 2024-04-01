@@ -1,5 +1,9 @@
 package models
 
+type ErrorResponse struct {
+	Message string `json:"message"`
+}
+
 type VerifyRequest struct {
 	ID   string `json:"id"`
 	Nick string `json:"nick"`

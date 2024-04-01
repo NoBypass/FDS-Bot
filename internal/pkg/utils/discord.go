@@ -19,10 +19,10 @@ func ComponentName(obj any) string {
 	switch obj.(type) {
 	case *discordgo.Button:
 		return obj.(*discordgo.Button).CustomID
-	case *discordgo.SelectMenu:
-		return obj.(*discordgo.SelectMenu).CustomID
 	case *discordgo.ApplicationCommand:
 		return obj.(*discordgo.ApplicationCommand).Name
+	case *discordgo.InteractionResponse:
+		return obj.(*discordgo.InteractionResponse).Data.CustomID
 	}
 	return ""
 }

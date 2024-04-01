@@ -10,14 +10,14 @@ import (
 
 func AllModals(fds *session.FDSConnection) []event.Event {
 	return []event.Event{
-		&modalVerify{},
+		&modalVerify{fds: fds},
 	}
 }
 
 type (
 	modalVerify struct {
-		fds  *session.FDSConnection
-		user *discordgo.User
+		fds      *session.FDSConnection
+		username string
 	}
 )
 
@@ -25,13 +25,13 @@ func (m *modalVerify) Content() any {
 	return &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseModal,
 		Data: &discordgo.InteractionResponseData{
-			CustomID: "verify_modal_submit",
-			Title:    "Verify " + m.user.Username,
+			CustomID: "modal_verify_submit",
+			Title:    "Verify " + m.username,
 			Components: []discordgo.MessageComponent{
 				discordgo.ActionsRow{
 					Components: []discordgo.MessageComponent{
 						discordgo.TextInput{
-							CustomID:    "mc_name",
+							CustomID:    "input_mc_name",
 							Label:       "What is your Minecraft name?",
 							Style:       discordgo.TextInputShort,
 							Placeholder: "Your Minecraft name",

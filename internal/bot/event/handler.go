@@ -12,6 +12,7 @@ import (
 
 func (m *Manager) Handle(s *discordgo.Session, i *discordgo.InteractionCreate) {
 	go func() {
+		// TODO recover from panics
 		name := utils.InteractionName(i)
 		sp := m.tracer.StartSpan(name)
 		defer sp.Finish()

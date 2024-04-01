@@ -23,7 +23,7 @@ type (
 
 func (b *buttonVerify) Content() any {
 	return &discordgo.Button{
-		CustomID: "verify",
+		CustomID: "btn_verify",
 		Style:    discordgo.SuccessButton,
 		Label:    "Verify",
 		Emoji: discordgo.ComponentEmoji{
@@ -34,5 +34,5 @@ func (b *buttonVerify) Content() any {
 
 func (b *buttonVerify) Exec(s *discordgo.Session, i *discordgo.InteractionCreate, _ opentracing.Span) error {
 	return s.InteractionRespond(i.Interaction,
-		(&modalVerify{b.fds, i.Member.User}).Content().(*discordgo.InteractionResponse))
+		(&modalVerify{b.fds, i.Member.User.Username}).Content().(*discordgo.InteractionResponse))
 }

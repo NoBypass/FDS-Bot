@@ -35,6 +35,7 @@ type (
 	profile cmd
 	teams   cmd
 	vcteams cmd
+	revoke  cmd
 )
 
 func (t *vcteams) Content() any {
