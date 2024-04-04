@@ -87,11 +87,11 @@ func (m *Manager) Remove() {
 		panic(err)
 	}
 
-	for _, cmd := range cmds {
+	for i, cmd := range cmds {
 		err := m.s.ApplicationCommandDelete(m.s.State.User.ID, "", cmd.ID)
 		if err != nil {
 			panic(err)
 		}
-		fmt.Printf("Deleted command: %s\n", cmd.Name)
+		fmt.Printf("Deleted command: %s (%d/%d)\n", cmd.Name, i+1, len(cmds))
 	}
 }

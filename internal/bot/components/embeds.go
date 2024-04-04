@@ -104,7 +104,7 @@ func EmbedHelp(s *discordgo.Session, cmds map[string]*discordgo.ApplicationComma
 	return &discordgo.MessageEmbed{
 		Title:       fmt.Sprintf("FDS Bot %s", version.VERSION),
 		Description: "List of available commands",
-		Color:       0x00ff00,
+		Color:       0x2B2D31,
 		Fields: func() []*discordgo.MessageEmbedField {
 			fields := make([]*discordgo.MessageEmbedField, 0, len(cmds))
 			for name, cmd := range cmds {
@@ -127,5 +127,22 @@ func EmbedHelp(s *discordgo.Session, cmds map[string]*discordgo.ApplicationComma
 				return user.AvatarURL("64")
 			}(),
 		},
+	}
+}
+
+func EmbedLeaderboard(s *discordgo.Session, lb *model.LeaderboardResponse, page int) *discordgo.MessageEmbed {
+	return &discordgo.MessageEmbed{
+		Title: fmt.Sprintf("Leaderboard (Page %v)", page+1),
+		Color: 0x2B2D31,
+		Description: func() (final string) {
+			for i, player := range *lb {
+				user, err := s.User(player.DiscordID)
+				if err != nil {
+					user = &discordgo.User{ID: "Unknown"}
+				}
+				final += fmt.Sprintf("%d. %s - Level: %d | XP: %f\n", i+1, user.Mention(), player.Level, player.XP)
+			}
+			return
+		}(),
 	}
 }

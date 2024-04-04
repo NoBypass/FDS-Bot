@@ -9,6 +9,7 @@ func AllCommands(fds *session.FDSConnection) []event.Event {
 	return []event.Event{
 		Admin(fds),
 		Help(),
+		Leaderboard(fds),
 		Ping(),
 		Play(),
 		Profile(fds),
