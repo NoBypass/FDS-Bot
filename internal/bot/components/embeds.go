@@ -61,8 +61,13 @@ func EmbedTeams(teams [][]string) *discordgo.MessageEmbed {
 			var fields []*discordgo.MessageEmbedField
 			for i, team := range teams {
 				fields = append(fields, &discordgo.MessageEmbedField{
-					Name:   fmt.Sprintf("Team %d", i+1),
-					Value:  fmt.Sprintf("Members: %s", team),
+					Name: fmt.Sprintf("Team %d", i+1),
+					Value: func() (r string) {
+						for _, player := range team {
+							r += fmt.Sprintf("%s\n", player)
+						}
+						return
+					}(),
 					Inline: true,
 				})
 			}
@@ -73,7 +78,7 @@ func EmbedTeams(teams [][]string) *discordgo.MessageEmbed {
 
 func EmbedPlay(member *discordgo.Member, desc *discordgo.ApplicationCommandInteractionDataOption, mode string) *discordgo.MessageEmbed {
 	return &discordgo.MessageEmbed{
-		Title: fmt.Sprintf("%s is looking to play %s", member.User.Username, mode),
+		Title: fmt.Sprintf("%s is looking to play %s", member.Nick, mode),
 		Description: func() string {
 			if desc != nil {
 				return fmt.Sprintf("**Description**\n%v", desc.Value)
@@ -82,7 +87,7 @@ func EmbedPlay(member *discordgo.Member, desc *discordgo.ApplicationCommandInter
 		}(),
 		Color: 0x2B2D31,
 		Author: &discordgo.MessageEmbedAuthor{
-			Name:    member.User.Username,
+			Name:    member.Nick,
 			IconURL: member.User.AvatarURL("64"),
 		},
 	}
