@@ -1,4 +1,4 @@
-FROM golang:1.21.5-alpine
+FROM golang:1.22.1-alpine
 LABEL authors="NoBypass"
 
 WORKDIR /app
@@ -7,6 +7,6 @@ COPY . .
 
 RUN go mod download
 
-RUN go build -o app ./cmd/app/main.go
+RUN go build -o bot ./cmd/bot/main.go
 
-ENTRYPOINT ["./app"]
+ENTRYPOINT ["/app/bot"]
