@@ -17,7 +17,7 @@ func (c *FDSConnection) Verify(sp opentracing.Span, input *model.VerifyRequest) 
 }
 
 func (c *FDSConnection) Daily(sp opentracing.Span, id string) (*model.MemberResponse, error) {
-	req, err := c.newRequest(http.MethodPost, "/discord/daily/"+id, nil, sp)
+	req, err := c.newRequest(http.MethodPatch, "/discord/daily/"+id, nil, sp)
 	if err != nil {
 		return nil, err
 	}

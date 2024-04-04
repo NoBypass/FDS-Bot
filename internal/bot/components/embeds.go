@@ -26,6 +26,9 @@ func EmbedProfile(member *model.MemberResponse, url string) *discordgo.MessageEm
 			if err != nil {
 				dailyAt = time.Time{}
 			}
+			if member.Streak == 0 {
+				startDate = "Never"
+			}
 
 			return []*discordgo.MessageEmbedField{
 				{
@@ -149,5 +152,23 @@ func EmbedLeaderboard(s *discordgo.Session, lb *model.LeaderboardResponse, page 
 			}
 			return
 		}(),
+	}
+}
+
+func EmbedDaily(before, after *model.MemberResponse) *discordgo.MessageEmbed {
+	xpDiff := after.XP - before.XP
+	lvlDiff := after.Level - before.Level
+	var lvlup string
+	if lvlDiff > 0 {
+		xpDiff += before.GetNeededXP() - before.XP
+		lvlup = fmt.Sprintf("**You have leveled up to %d!**\n", after.Level)
+	}
+
+	return &discordgo.MessageEmbed{
+		Title: fmt.Sprintf("Daily reward for %s", before.Nick),
+		Color: 0x2B2D31,
+		Description: fmt.Sprintf("You have claimed your daily reward!\n"+
+			"%s\nReveived **%d**xp\nCurrent streak: **%d**\n"+
+			"Need **%d** for next level\nLevel **%d**", lvlup, int(xpDiff), after.Streak, int(after.GetNeededXP()-after.XP), after.Level),
 	}
 }

@@ -8,6 +8,7 @@ import (
 func AllCommands(fds *session.FDSConnection) []event.Event {
 	return []event.Event{
 		Admin(fds),
+		Daily(fds),
 		Help(),
 		Leaderboard(fds),
 		Ping(),
