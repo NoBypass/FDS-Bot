@@ -32,7 +32,7 @@ func (r *revoke) Exec(s *discordgo.Session, i *discordgo.InteractionCreate, ctx 
 
 func (r *revoke) Content() *discordgo.ApplicationCommand {
 	return &discordgo.ApplicationCommand{
-		Name:                     "revoke",
+		Name:                     r.ID(),
 		Version:                  "v1.0.0",
 		DefaultMemberPermissions: &utils.AdminPerms,
 		Type:                     discordgo.UserApplicationCommand,

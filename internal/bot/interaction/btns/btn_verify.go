@@ -28,7 +28,7 @@ func (v *verify) Exec(s *discordgo.Session, i *discordgo.InteractionCreate, _ *e
 
 func (v *verify) Content() *discordgo.Button {
 	return &discordgo.Button{
-		CustomID: "btn_verify",
+		CustomID: v.ID(),
 		Style:    discordgo.SuccessButton,
 		Label:    "Verify",
 		Emoji: discordgo.ComponentEmoji{

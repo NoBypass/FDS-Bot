@@ -61,7 +61,7 @@ func (a *admin) Exec(s *discordgo.Session, i *discordgo.InteractionCreate, _ *ev
 
 func (a *admin) Content() *discordgo.ApplicationCommand {
 	return &discordgo.ApplicationCommand{
-		Name:                     "admin",
+		Name:                     a.ID(),
 		Description:              "Admin utilities",
 		Version:                  "v1.0.3",
 		DefaultMemberPermissions: &utils.AdminPerms,

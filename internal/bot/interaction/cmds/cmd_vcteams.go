@@ -90,7 +90,7 @@ var two = 2.0
 
 func (v *vcTeams) Content() *discordgo.ApplicationCommand {
 	return &discordgo.ApplicationCommand{
-		Name:        "vcteams",
+		Name:        v.ID(),
 		Description: "Generate random teams from the members in your voice channel",
 		Version:     "v1.0.1",
 		Options: []*discordgo.ApplicationCommandOption{

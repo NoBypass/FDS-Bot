@@ -1,4 +1,6 @@
-package models
+package model
+
+import "math"
 
 type ErrorResponse struct {
 	Message string `json:"message"`
@@ -36,4 +38,11 @@ type LeaderboardResponse []struct {
 	DiscordID string  `json:"discord_id"`
 	Level     int     `json:"level"`
 	XP        float64 `json:"xp"`
+}
+
+func (d *MemberResponse) GetNeededXP() float64 {
+	if d.Level < 10 {
+		return math.Pow(float64(d.Level), 2) * 100
+	}
+	return 10000
 }

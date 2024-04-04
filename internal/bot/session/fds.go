@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/nobypass/fds-bot/internal/bot/models"
+	"github.com/nobypass/fds-bot/internal/bot/model"
 	"github.com/opentracing/opentracing-go"
 	"net/http"
 	"os"
@@ -71,7 +71,7 @@ func do[T any](req *http.Request) (*T, error) {
 	defer res.Body.Close()
 
 	if res.StatusCode < 200 || res.StatusCode >= 300 {
-		e := new(models.ErrorResponse)
+		e := new(model.ErrorResponse)
 		err = json.NewDecoder(res.Body).Decode(e)
 		if err != nil {
 			return nil, err

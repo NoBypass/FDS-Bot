@@ -5,7 +5,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 	"github.com/nobypass/fds-bot/internal/bot/components"
 	"github.com/nobypass/fds-bot/internal/bot/event"
-	"github.com/nobypass/fds-bot/internal/bot/models"
+	"github.com/nobypass/fds-bot/internal/bot/model"
 	"github.com/nobypass/fds-bot/internal/bot/session"
 	"github.com/opentracing/opentracing-go"
 )
@@ -24,7 +24,7 @@ func (v *verify) ID() string {
 
 func (v *verify) Exec(s *discordgo.Session, i *discordgo.InteractionCreate, _ *event.Context, sp opentracing.Span) (*event.Context, error) {
 	ign := i.Interaction.ModalSubmitData().Components[0].(*discordgo.ActionsRow).Components[0].(*discordgo.TextInput).Value
-	resp, err := v.fds.Verify(sp, &models.VerifyRequest{
+	resp, err := v.fds.Verify(sp, &model.VerifyRequest{
 		ID:   i.Member.User.ID,
 		Nick: ign,
 		Name: i.Member.User.Username,

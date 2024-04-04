@@ -3,26 +3,48 @@ package components
 import (
 	"fmt"
 	"github.com/bwmarrin/discordgo"
-	"github.com/nobypass/fds-bot/internal/bot/models"
+	"github.com/nobypass/fds-bot/internal/bot/model"
+	"github.com/nobypass/fds-bot/internal/pkg/utils"
 	"github.com/nobypass/fds-bot/internal/pkg/version"
+	"time"
 )
 
-func EmbedRevoked(member *models.MemberResponse) *discordgo.MessageEmbed {
+func EmbedRevoked(member *model.MemberResponse) *discordgo.MessageEmbed {
 	return &discordgo.MessageEmbed{
 		Title:       fmt.Sprintf("Verification of %s revoked", member.Nick),
 		Description: fmt.Sprintf("Previous data: %+v", member),
 	}
 }
 
-func EmbedProfile(member *models.MemberResponse) *discordgo.MessageEmbed {
+func EmbedProfile(member *model.MemberResponse, url string) *discordgo.MessageEmbed {
 	return &discordgo.MessageEmbed{
 		Title: fmt.Sprintf("Profile of %s", member.Nick),
 		Color: 0x2B2D31,
-		// TODO: Add additional information
+		Fields: func() []*discordgo.MessageEmbedField {
+			startDate := time.Now().Add(-time.Duration(member.Streak) * 24 * time.Hour).Format("2006-01-02")
+			dailyAt, err := time.Parse(time.RFC3339, member.LastDailyAt)
+			if err != nil {
+				dailyAt = time.Time{}
+			}
+
+			return []*discordgo.MessageEmbedField{
+				{
+					Name:  "Last daily was claimed at",
+					Value: fmt.Sprintf("`%s`\n(`%s` ago)", dailyAt.Format("2006-01-02 15:04:05"), utils.StrAgo(dailyAt)),
+				},
+				{
+					Name:  "Streak",
+					Value: fmt.Sprintf("Current Streak `%d`\nStarted at `%s`\n Best Streak `TODO`", member.Streak, startDate),
+				},
+			}
+		}(),
+		Image: &discordgo.MessageEmbedImage{
+			URL: url,
+		},
 	}
 }
 
-func EmbedVerificationDone(resp *models.VerifyResponse) *discordgo.MessageEmbed {
+func EmbedVerificationDone(resp *model.VerifyResponse) *discordgo.MessageEmbed {
 	return &discordgo.MessageEmbed{
 		Title: "You are verified!",
 		Color: 0x2B2D31,

@@ -98,7 +98,7 @@ func (p *play) Exec(s *discordgo.Session, i *discordgo.InteractionCreate, _ *eve
 
 func (p *play) Content() *discordgo.ApplicationCommand {
 	return &discordgo.ApplicationCommand{
-		Name:        "play",
+		Name:        p.ID(),
 		Description: "Ask the server to play any gamemode with you",
 		Version:     "v1.1.0",
 		Options: []*discordgo.ApplicationCommandOption{

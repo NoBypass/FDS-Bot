@@ -21,7 +21,10 @@ func (p *profile) ID() string {
 }
 
 func (p *profile) Exec(s *discordgo.Session, i *discordgo.InteractionCreate, _ *event.Context, sp opentracing.Span) (*event.Context, error) {
-	option := i.ApplicationCommandData().Options[0]
+	var option *discordgo.ApplicationCommandInteractionDataOption
+	if len(i.ApplicationCommandData().Options) > 0 {
+		option = i.ApplicationCommandData().Options[0]
+	}
 	var id string
 	if option == nil {
 		id = i.Member.User.ID
@@ -34,11 +37,26 @@ func (p *profile) Exec(s *discordgo.Session, i *discordgo.InteractionCreate, _ *
 		return nil, err
 	}
 
+	imgMsg, err := s.ChannelMessageSendComplex(i.ChannelID, &discordgo.MessageSend{
+		Files: []*discordgo.File{
+			components.ImageProfile(member),
+		},
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	imageURL := imgMsg.Attachments[0].URL
+	err = s.ChannelMessageDelete(i.ChannelID, imgMsg.ID)
+	if err != nil {
+		return nil, err
+	}
+
 	return nil, s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Embeds: []*discordgo.MessageEmbed{
-				components.EmbedProfile(member),
+				components.EmbedProfile(member, imageURL),
 			},
 		},
 	})
@@ -46,9 +64,9 @@ func (p *profile) Exec(s *discordgo.Session, i *discordgo.InteractionCreate, _ *
 
 func (p *profile) Content() *discordgo.ApplicationCommand {
 	return &discordgo.ApplicationCommand{
-		Name:        "profile",
+		Name:        p.ID(),
 		Description: "View the profile of a member",
-		Version:     "v1.0.0",
+		Version:     "v1.0.1",
 		Options: []*discordgo.ApplicationCommandOption{
 			{
 				Type:        discordgo.ApplicationCommandOptionUser,

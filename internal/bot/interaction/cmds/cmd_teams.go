@@ -70,7 +70,7 @@ func (t *teams) Exec(s *discordgo.Session, i *discordgo.InteractionCreate, _ *ev
 
 func (t *teams) Content() *discordgo.ApplicationCommand {
 	return &discordgo.ApplicationCommand{
-		Name:        "teams",
+		Name:        t.ID(),
 		Description: "Generate random teams from input",
 		Version:     "v1.0.3",
 		Options: []*discordgo.ApplicationCommandOption{

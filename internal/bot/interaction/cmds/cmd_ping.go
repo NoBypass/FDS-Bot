@@ -30,7 +30,7 @@ func (p *ping) Exec(s *discordgo.Session, i *discordgo.InteractionCreate, _ *eve
 
 func (p *ping) Content() *discordgo.ApplicationCommand {
 	return &discordgo.ApplicationCommand{
-		Name:        "ping",
+		Name:        p.ID(),
 		Description: "Ping the bot",
 		Version:     "v1.2.0",
 	}

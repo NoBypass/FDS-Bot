@@ -41,7 +41,7 @@ func (h *help) Exec(s *discordgo.Session, i *discordgo.InteractionCreate, _ *eve
 
 func (h *help) Content() *discordgo.ApplicationCommand {
 	return &discordgo.ApplicationCommand{
-		Name:        "help",
+		Name:        h.ID(),
 		Description: "Get help",
 		Version:     "v1.0.0",
 	}
