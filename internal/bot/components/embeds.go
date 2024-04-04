@@ -6,6 +6,8 @@ import (
 	"github.com/nobypass/fds-bot/internal/bot/model"
 	"github.com/nobypass/fds-bot/internal/pkg/utils"
 	"github.com/nobypass/fds-bot/internal/pkg/version"
+	"github.com/opentracing/opentracing-go"
+	"github.com/uber/jaeger-client-go"
 	"time"
 )
 
@@ -170,5 +172,17 @@ func EmbedDaily(before, after *model.MemberResponse) *discordgo.MessageEmbed {
 		Description: fmt.Sprintf("You have claimed your daily reward!\n"+
 			"%s\nReveived **%d**xp\nCurrent streak: **%d**\n"+
 			"Need **%d** for next level\nLevel **%d**", lvlup, int(xpDiff), after.Streak, int(after.GetNeededXP()-after.XP), after.Level),
+	}
+}
+
+func EmbedError(err error, sp opentracing.Span) *discordgo.MessageEmbed {
+	traceID := sp.Context().(jaeger.SpanContext).TraceID().String()
+	return &discordgo.MessageEmbed{
+		Title:       "An error occurred",
+		Color:       0x2B2D31,
+		Description: fmt.Sprintf("## `%v`\n\n\nIf you think that this is not intended behaviour, please send this ID `%s` to an admin", err, traceID),
+		Footer: &discordgo.MessageEmbedFooter{
+			Text: fmt.Sprintf("TraceID: %s", traceID),
+		},
 	}
 }

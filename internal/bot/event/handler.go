@@ -1,12 +1,11 @@
 package event
 
 import (
-	"fmt"
 	"github.com/bwmarrin/discordgo"
+	"github.com/nobypass/fds-bot/internal/bot/components"
 	"github.com/nobypass/fds-bot/internal/monitoring"
 	"github.com/nobypass/fds-bot/internal/pkg/utils"
 	"github.com/opentracing/opentracing-go/ext"
-	"github.com/uber/jaeger-client-go"
 	"time"
 )
 
@@ -39,9 +38,9 @@ func (m *Manager) Handle(s *discordgo.Session, i *discordgo.InteractionCreate) {
 			s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 				Type: discordgo.InteractionResponseChannelMessageWithSource,
 				Data: &discordgo.InteractionResponseData{
-					Content: fmt.Sprintf("An error occurred: %s\n"+
-						"If you think that this is not intended behaviour, "+
-						"please send the following id to an admin: `%s`", err.Error(), sp.Context().(jaeger.SpanContext).TraceID().String()),
+					Embeds: []*discordgo.MessageEmbed{
+						components.EmbedError(err, sp),
+					},
 					Flags: discordgo.MessageFlagsEphemeral,
 				},
 			})
