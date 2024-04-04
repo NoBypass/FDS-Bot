@@ -51,3 +51,12 @@ func (c *FDSConnection) Member(sp opentracing.Span, id string) (*models.MemberRe
 
 	return do[models.MemberResponse](req)
 }
+
+func (c *FDSConnection) Revoke(sp opentracing.Span, id string) (*models.MemberResponse, error) {
+	req, err := c.newRequest(http.MethodDelete, "/discord/revoke/"+id, nil, sp)
+	if err != nil {
+		return nil, err
+	}
+
+	return do[models.MemberResponse](req)
+}

@@ -16,16 +16,17 @@ func LogEvent(i *discordgo.InteractionCreate, sp opentracing.Span, latency time.
 	}
 
 	data := map[string]any{
-		"time":     time.Now().Format(time.RFC3339),
-		"type":     i.Type,
-		"name":     utils.InteractionName(i),
-		"latency":  latency.String(),
-		"guild":    i.GuildID,
-		"channel":  i.ChannelID,
-		"member":   i.Member.User.ID,
-		"username": i.Member.User.Username,
-		"error":    e,
-		"trace_id": sp.Context().(jaeger.SpanContext).TraceID().String(),
+		"time":           time.Now().Format(time.RFC3339),
+		"type":           i.Type,
+		"name":           utils.InteractionName(i),
+		"latency":        latency.String(),
+		"guild":          i.GuildID,
+		"channel":        i.ChannelID,
+		"member":         i.Member.User.ID,
+		"username":       i.Member.User.Username,
+		"interaction_id": i.Interaction.ID,
+		"error":          e,
+		"trace_id":       sp.Context().(jaeger.SpanContext).TraceID().String(),
 	}
 
 	sp.LogKV(
@@ -35,6 +36,7 @@ func LogEvent(i *discordgo.InteractionCreate, sp opentracing.Span, latency time.
 		"channel", data["channel"],
 		"member", data["member"],
 		"username", data["username"],
+		"interaction_id", data["interaction_id"],
 	)
 
 	j, err := json.Marshal(data)

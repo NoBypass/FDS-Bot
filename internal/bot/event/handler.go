@@ -16,14 +16,24 @@ func (m *Manager) Handle(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		name := utils.InteractionName(i)
 		sp := m.tracer.StartSpan(name)
 		defer sp.Finish()
+		start := time.Now()
 
-		e, ok := m.Events[name]
+		ev, ok := m.Events[name]
 		if !ok {
 			return
 		}
 
-		start := time.Now()
-		err := e.Exec(s, i, sp)
+		untypedCtx, ok := m.cache.Get(i.Member.User.ID)
+		ctx := InitContext(i.Member)
+		if ok {
+			ctx = untypedCtx.(*Context)
+		}
+
+		newCtx, err := ev.Exec(s, i, ctx, sp)
+		if newCtx != nil {
+			m.cache.Set(i.Member.User.ID, newCtx, 2*time.Minute)
+		}
+
 		if err != nil {
 			ext.LogError(sp, err)
 			s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
@@ -37,6 +47,6 @@ func (m *Manager) Handle(s *discordgo.Session, i *discordgo.InteractionCreate) {
 			})
 		}
 
-		monitoring.LogEvent(i, sp, time.Now().Sub(start), err)
+		monitoring.LogEvent(i, sp, time.Since(start), err)
 	}()
 }
