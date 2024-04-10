@@ -19,7 +19,7 @@ import (
 func main() {
 	logger := log.New("bot")
 	logger.SetLevel(log.INFO)
-	logger.Print(`
+	logger.Print(`:
    _______  ____   ___       __
   / __/ _ \/ __/  / _ )___  / /_
  / _// // /\ \   / _  / _ \/ __/
