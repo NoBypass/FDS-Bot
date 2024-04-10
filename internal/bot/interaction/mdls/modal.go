@@ -1,4 +1,4 @@
-package modals
+package mdls
 
 import (
 	"github.com/nobypass/fds-bot/internal/bot/event"

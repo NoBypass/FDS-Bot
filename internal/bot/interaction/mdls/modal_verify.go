@@ -1,4 +1,4 @@
-package modals
+package mdls
 
 import (
 	"errors"

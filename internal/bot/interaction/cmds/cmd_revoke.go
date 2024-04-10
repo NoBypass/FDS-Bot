@@ -3,7 +3,7 @@ package cmds
 import (
 	"github.com/bwmarrin/discordgo"
 	"github.com/nobypass/fds-bot/internal/bot/event"
-	"github.com/nobypass/fds-bot/internal/bot/interaction/modals"
+	"github.com/nobypass/fds-bot/internal/bot/interaction/mdls"
 	"github.com/nobypass/fds-bot/internal/bot/session"
 	"github.com/nobypass/fds-bot/internal/pkg/utils"
 	"github.com/opentracing/opentracing-go"
@@ -25,7 +25,7 @@ func (r *revoke) Exec(s *discordgo.Session, i *discordgo.InteractionCreate, ctx 
 	ctx.Set("revoke_interaction", i)
 
 	return ctx, s.InteractionRespond(i.Interaction,
-		modals.Revoke(r.fds).Content(map[string]any{
+		mdls.Revoke(r.fds).Content(map[string]any{
 			"name": i.Member.Nick,
 		}))
 }

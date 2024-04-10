@@ -2,9 +2,9 @@ package event
 
 import (
 	"context"
-	"fmt"
 	"github.com/NoBypass/mincache"
 	"github.com/bwmarrin/discordgo"
+	"github.com/labstack/gommon/log"
 	"github.com/opentracing/opentracing-go"
 )
 
@@ -17,6 +17,7 @@ type (
 	Manager struct {
 		Events map[string]Event
 		tracer opentracing.Tracer
+		logger *log.Logger
 		s      *discordgo.Session
 		cache  *mincache.CacheInstance
 	}
@@ -42,12 +43,13 @@ type (
 	}
 )
 
-func NewManager(s *discordgo.Session, tracer opentracing.Tracer, c *mincache.CacheInstance) *Manager {
+func NewManager(s *discordgo.Session, tracer opentracing.Tracer, c *mincache.CacheInstance, l *log.Logger) *Manager {
 	return &Manager{
 		Events: make(map[string]Event),
 		tracer: tracer,
-		s:      s,
+		logger: l,
 		cache:  c,
+		s:      s,
 	}
 }
 
@@ -77,7 +79,7 @@ func (m *Manager) Add(e ...Event) {
 				panic(err)
 			}
 		}
-		fmt.Printf("Registered event: %s (%d/%d)\n", name, i+1, len(e))
+		m.logger.Infof("Registered event: %s (%d/%d)", name, i+1, len(e))
 	}
 }
 
@@ -92,6 +94,6 @@ func (m *Manager) Remove() {
 		if err != nil {
 			panic(err)
 		}
-		fmt.Printf("Deleted command: %s (%d/%d)\n", cmd.Name, i+1, len(cmds))
+		m.logger.Infof("Deleted command: %s (%d/%d)", cmd.Name, i+1, len(cmds))
 	}
 }

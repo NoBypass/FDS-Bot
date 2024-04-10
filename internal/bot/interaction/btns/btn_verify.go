@@ -3,7 +3,7 @@ package btns
 import (
 	"github.com/bwmarrin/discordgo"
 	"github.com/nobypass/fds-bot/internal/bot/event"
-	"github.com/nobypass/fds-bot/internal/bot/interaction/modals"
+	"github.com/nobypass/fds-bot/internal/bot/interaction/mdls"
 	"github.com/nobypass/fds-bot/internal/bot/session"
 	"github.com/opentracing/opentracing-go"
 )
@@ -21,7 +21,7 @@ func (v *verify) ID() string {
 }
 
 func (v *verify) Exec(s *discordgo.Session, i *discordgo.InteractionCreate, _ *event.Context, _ opentracing.Span) (*event.Context, error) {
-	return nil, s.InteractionRespond(i.Interaction, modals.Verify(v.fds).Content(map[string]any{
+	return nil, s.InteractionRespond(i.Interaction, mdls.Verify(v.fds).Content(map[string]any{
 		"username": i.Member.User.Username,
 	}))
 }
