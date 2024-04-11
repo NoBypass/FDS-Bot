@@ -76,7 +76,7 @@ func (m *Manager) Add(e ...Event) {
 		case Command:
 			_, err := m.s.ApplicationCommandCreate(m.s.State.User.ID, "", ev.(Command).Content())
 			if err != nil {
-				panic(err)
+				log.Fatal(err)
 			}
 		}
 		m.logger.Infof("Registered event: %s (%d/%d)", name, i+1, len(e))
@@ -86,13 +86,13 @@ func (m *Manager) Add(e ...Event) {
 func (m *Manager) Remove() {
 	cmds, err := m.s.ApplicationCommands(m.s.State.User.ID, "")
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	for i, cmd := range cmds {
 		err := m.s.ApplicationCommandDelete(m.s.State.User.ID, "", cmd.ID)
 		if err != nil {
-			panic(err)
+			log.Fatal(err)
 		}
 		m.logger.Infof("Deleted command: %s (%d/%d)", cmd.Name, i+1, len(cmds))
 	}

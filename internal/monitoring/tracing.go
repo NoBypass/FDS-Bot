@@ -2,6 +2,7 @@ package monitoring
 
 import (
 	"fmt"
+	"github.com/labstack/gommon/log"
 	"github.com/nobypass/fds-bot/internal/pkg/version"
 	"github.com/opentracing/opentracing-go"
 	"github.com/uber/jaeger-client-go"
@@ -23,7 +24,7 @@ func CreateTracer() (opentracing.Tracer, io.Closer) {
 
 	tracer, closer, err := cfg.NewTracer()
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	return tracer, closer
 }

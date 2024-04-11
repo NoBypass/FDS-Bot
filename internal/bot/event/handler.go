@@ -1,7 +1,6 @@
 package event
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/bwmarrin/discordgo"
 	"github.com/nobypass/fds-bot/internal/bot/components"
@@ -85,7 +84,6 @@ func (m *Manager) Handle(s *discordgo.Session, i *discordgo.InteractionCreate) {
 			"interaction_id", logData["interaction_id"],
 		)
 
-		j, _ := json.Marshal(logData)
-		m.logger.Print(string(j))
+		m.logger.Infoj(logData)
 	}()
 }

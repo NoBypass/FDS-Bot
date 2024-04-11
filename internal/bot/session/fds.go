@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/labstack/gommon/log"
 	"github.com/nobypass/fds-bot/internal/bot/model"
 	"github.com/opentracing/opentracing-go"
 	"net/http"
@@ -24,9 +25,8 @@ func ConnectToFDS(tracer opentracing.Tracer) *FDSConnection {
 	defer sp.Finish()
 	resp, err := conn.Login(sp, os.Getenv("PASSWORD"))
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
-	println("Connected to FDS successfully")
 
 	conn.token = resp.Token
 	return conn
