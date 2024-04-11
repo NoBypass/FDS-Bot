@@ -30,7 +30,7 @@ ________________________________________________
 
 	tracer, closer := monitoring.CreateTracer()
 	defer closer.Close()
-	logger.Info("✓ Connected to SurrealDB")
+	logger.Info("✓ Started Tracer")
 
 	fds := session.ConnectToFDS(tracer)
 	logger.Info("✓ Logged in to FDS API")

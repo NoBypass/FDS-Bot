@@ -71,7 +71,7 @@ func (m *Manager) Handle(s *discordgo.Session, i *discordgo.InteractionCreate) {
 					return "ERROR"
 				}
 				return "INFO"
-			},
+			}(),
 		}
 
 		sp.LogKV(

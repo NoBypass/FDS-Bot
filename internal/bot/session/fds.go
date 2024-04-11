@@ -25,7 +25,7 @@ func ConnectToFDS(tracer opentracing.Tracer) *FDSConnection {
 	defer sp.Finish()
 	resp, err := conn.Login(sp, os.Getenv("PASSWORD"))
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("couldn't connect to FDS backend: ", err)
 	}
 
 	conn.token = resp.Token
