@@ -6,6 +6,7 @@ import (
 	"github.com/nobypass/fds-bot/internal/bot/components"
 	"github.com/nobypass/fds-bot/internal/pkg/utils"
 	"github.com/opentracing/opentracing-go/ext"
+	"github.com/uber/jaeger-client-go"
 	"time"
 )
 
@@ -72,6 +73,7 @@ func (m *Manager) Handle(s *discordgo.Session, i *discordgo.InteractionCreate) {
 				}
 				return "INFO"
 			}(),
+			"trace_id": sp.Context().(jaeger.SpanContext).TraceID().String(),
 		}
 
 		sp.LogKV(
