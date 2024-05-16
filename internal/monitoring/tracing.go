@@ -8,9 +8,11 @@ import (
 	"github.com/uber/jaeger-client-go"
 	"github.com/uber/jaeger-client-go/config"
 	"io"
+	"os"
 )
 
 func CreateTracer() (opentracing.Tracer, io.Closer) {
+	endpoint := os.Getenv("JAEGER_ENDPOINT")
 	cfg := config.Configuration{
 		ServiceName: fmt.Sprintf("FDS Discord Bot %s", version.VERSION),
 		Sampler: &config.SamplerConfig{
@@ -18,7 +20,8 @@ func CreateTracer() (opentracing.Tracer, io.Closer) {
 			Param: 1,
 		},
 		Reporter: &config.ReporterConfig{
-			LogSpans: true,
+			LogSpans:          true,
+			CollectorEndpoint: endpoint,
 		},
 	}
 

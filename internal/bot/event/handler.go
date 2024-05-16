@@ -25,7 +25,6 @@ func (m *Manager) Handle(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		}
 
 		sp := m.tracer.StartSpan(name)
-		defer sp.Finish()
 		start := time.Now()
 
 		untypedCtx, ok := m.cache.Get(i.Member.User.ID)
@@ -52,6 +51,7 @@ func (m *Manager) Handle(s *discordgo.Session, i *discordgo.InteractionCreate) {
 			})
 		}
 
+		sp.Finish()
 		logData := map[string]any{
 			"type":             i.Type,
 			"interaction_name": name,
