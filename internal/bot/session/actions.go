@@ -26,7 +26,7 @@ func (c *FDSConnection) Daily(sp opentracing.Span, id string) (*model.MemberResp
 }
 
 func (c *FDSConnection) Login(sp opentracing.Span, pwd string) (*model.LoginResponse, error) {
-	req, err := c.newRequest(http.MethodPost, "/discord/bot-login", &model.LoginRequest{Pwd: pwd}, sp)
+	req, err := c.newRequest(http.MethodPost, "/auth/bot", &model.LoginRequest{Pwd: pwd}, sp)
 	if err != nil {
 		return nil, err
 	}
